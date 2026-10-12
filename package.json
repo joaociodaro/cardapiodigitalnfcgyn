@@ -1,27 +1,61 @@
 {
-  "name": "cardapio",
+  "name": "cardapio-digital",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:db": "bash scripts/test-db.sh",
+    "db:seed": "tsx scripts/generate-seed.ts"
   },
   "dependencies": {
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/bebas-neue": "^5.3.0",
+    "@fontsource/bodoni-moda": "^5.3.0",
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "@fontsource/cinzel": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/dm-serif-display": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/italiana": "^5.3.0",
+    "@fontsource/jost": "^5.3.0",
+    "@fontsource/lato": "^5.3.0",
+    "@fontsource/libre-baskerville": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
+    "@fontsource/nunito": "^5.3.0",
+    "@fontsource/oswald": "^5.3.0",
+    "@fontsource/parisienne": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/quicksand": "^5.3.0",
+    "clsx": "^2.1.1",
+    "geist": "^1.7.2",
+    "lucide-react": "^1.55.0",
+    "next": "15.5.27",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.27"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.27",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }

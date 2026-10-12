@@ -1,0 +1,59 @@
+/* Estilos de base compartilhados por todos os modelos de cardápio. */
+
+.menu-root {
+  container-type: inline-size;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  font-size: calc(1rem * var(--m-body-scale, 1));
+}
+
+.menu-root :where(h1, h2, h3) {
+  font-family: var(--m-font-heading);
+  color: var(--m-heading);
+  font-weight: var(--m-heading-weight);
+  letter-spacing: var(--m-tracking);
+}
+
+.menu-root :focus-visible {
+  outline: 2px solid var(--m-primary);
+  outline-offset: 2px;
+}
+
+.menu-button {
+  background: var(--m-button);
+  color: var(--m-button-text);
+  border: 1px solid var(--m-button);
+  border-radius: var(--m-radius);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.menu-button:hover { filter: brightness(1.08); }
+.menu-button:active { transform: scale(0.99); }
+.menu-root[data-button="outline"] .menu-button {
+  background: transparent;
+  color: var(--m-button);
+}
+.menu-root[data-button="pill"] .menu-button { border-radius: 999px; }
+
+/* Escala de títulos controlada pelo editor */
+.m-h-xl { font-size: calc(2.4rem * var(--m-heading-scale)); line-height: 1.05; }
+.m-h-lg { font-size: calc(1.75rem * var(--m-heading-scale)); line-height: 1.1; }
+.m-h-md { font-size: calc(1.2rem * var(--m-heading-scale)); line-height: 1.2; }
+.m-h-sm { font-size: calc(1.02rem * var(--m-heading-scale)); line-height: 1.25; }
+
+.m-pad { padding-left: calc(1.25rem * var(--m-space)); padding-right: calc(1.25rem * var(--m-space)); }
+.m-gap { gap: calc(1rem * var(--m-space)); }
+.m-stack > * + * { margin-top: calc(2.5rem * var(--m-space)); }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+@keyframes menu-rise { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes menu-fade { from { opacity: 0; } to { opacity: 1; } }
+.menu-rise { animation: menu-rise 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.menu-fade { animation: menu-fade 0.25s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-rise, .menu-fade { animation: none; }
+}

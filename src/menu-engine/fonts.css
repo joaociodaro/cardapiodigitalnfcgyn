@@ -1,0 +1,56 @@
+/*
+ * Fontes disponíveis para os cardápios.
+ * Somente @font-face (subconjunto latino, cobre acentos do português):
+ * o navegador baixa o arquivo de uma fonte apenas quando ela é usada.
+ */
+@import "@fontsource/cinzel/latin-400.css";
+@import "@fontsource/cinzel/latin-600.css";
+@import "@fontsource/cormorant-garamond/latin-400.css";
+@import "@fontsource/cormorant-garamond/latin-400-italic.css";
+@import "@fontsource/cormorant-garamond/latin-600.css";
+@import "@fontsource/manrope/latin-300.css";
+@import "@fontsource/manrope/latin-400.css";
+@import "@fontsource/manrope/latin-600.css";
+@import "@fontsource/bebas-neue/latin-400.css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-700.css";
+@import "@fontsource/jost/latin-300.css";
+@import "@fontsource/jost/latin-400.css";
+@import "@fontsource/jost/latin-500.css";
+@import "@fontsource/italiana/latin-400.css";
+@import "@fontsource/bodoni-moda/latin-400.css";
+@import "@fontsource/bodoni-moda/latin-400-italic.css";
+@import "@fontsource/bodoni-moda/latin-600.css";
+@import "@fontsource/fraunces/latin-400.css";
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-400-italic.css";
+@import "@fontsource/nunito/latin-400.css";
+@import "@fontsource/nunito/latin-600.css";
+@import "@fontsource/nunito/latin-700.css";
+@import "@fontsource/playfair-display/latin-400.css";
+@import "@fontsource/playfair-display/latin-600.css";
+@import "@fontsource/playfair-display/latin-400-italic.css";
+@import "@fontsource/lato/latin-400.css";
+@import "@fontsource/lato/latin-700.css";
+@import "@fontsource/oswald/latin-400.css";
+@import "@fontsource/oswald/latin-500.css";
+@import "@fontsource/oswald/latin-600.css";
+@import "@fontsource/barlow/latin-400.css";
+@import "@fontsource/barlow/latin-500.css";
+@import "@fontsource/barlow/latin-600.css";
+@import "@fontsource/parisienne/latin-400.css";
+@import "@fontsource/quicksand/latin-400.css";
+@import "@fontsource/quicksand/latin-500.css";
+@import "@fontsource/quicksand/latin-600.css";
+@import "@fontsource/dm-serif-display/latin-400.css";
+@import "@fontsource/dm-serif-display/latin-400-italic.css";
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-700.css";
+@import "@fontsource/libre-baskerville/latin-400.css";
+@import "@fontsource/libre-baskerville/latin-400-italic.css";
+@import "@fontsource/libre-baskerville/latin-700.css";
+@import "@fontsource/montserrat/latin-400.css";
+@import "@fontsource/montserrat/latin-500.css";
+@import "@fontsource/montserrat/latin-600.css";
