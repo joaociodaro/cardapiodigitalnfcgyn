@@ -112,7 +112,11 @@ select set_config('request.jwt.claim.sub', '', false);
 do $$
 declare r record;
 begin
-  if (select count(*) from public.menus) <> 0 then raise exception 'anon não pode listar menus'; end if;
+  begin
+    perform count(*) from public.menus;
+    raise exception 'FALHA: anon conseguiu consultar menus';
+  exception when insufficient_privilege then null;  -- negado explicitamente
+  end;
   select * into r from public.get_published_menu('restaurante-da-ana');
   if r.available is not true then raise exception 'cardápio da Ana deveria estar disponível'; end if;
   select * into r from public.get_published_menu('bar-do-bruno');
@@ -141,5 +145,26 @@ begin
   if r.redirect_to is distinct from 'restaurante-da-ana' then raise exception 'slug antigo deveria redirecionar'; end if;
 end $$;
 reset role;
+
+-- 9. Onboarding: cria estabelecimento + vínculo de proprietário
+set role authenticated;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000000b', false);
+do $$
+declare est uuid;
+begin
+  est := public.create_establishment('Segunda unidade do Bruno', '+55 (62) 99999-0000');
+  if public.member_role_of(est) is distinct from 'owner' then raise exception 'Bruno deveria ser owner'; end if;
+  if (select whatsapp from public.establishments where id = est) <> '5562999990000' then raise exception 'whatsapp não normalizado'; end if;
+end $$;
+
+-- 10. Exclusão de conta anonimiza e despublica
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000000a', false);
+select public.request_account_deletion();
+reset role;
+do $$
+begin
+  if (select deleted_at from public.profiles where id = '00000000-0000-0000-0000-00000000000a') is null then raise exception 'perfil deveria estar excluído'; end if;
+  if (select status from public.menus where id = '20000000-0000-0000-0000-00000000000a') <> 'unpublished' then raise exception 'cardápio deveria ser despublicado'; end if;
+end $$;
 
 \echo 'RLS: todos os testes passaram'

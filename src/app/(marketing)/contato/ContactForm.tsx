@@ -1,92 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { site } from "@/config/site";
+import { useActionState } from "react";
+import { Field, FormAlert, SubmitButton, TextArea, inputClass, type ActionState } from "@/components/ui/form";
+import { sendContactAction } from "./actions";
 
-/**
- * Formulário de contato. Até a etapa de banco de dados, a mensagem é aberta
- * no aplicativo de e-mail do visitante (ou no WhatsApp, se configurado).
- * Na etapa 3 ela passa a ser gravada em `support_requests`.
- */
+const SUBJECTS = ["Quero contratar", "Criação personalizada do cardápio", "Dúvida sobre planos", "Suporte técnico", "Outro assunto"];
+
+/** Formulário de contato: grava em support_requests, visível no painel administrativo. */
 export function ContactForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [business, setBusiness] = useState("");
-  const [subject, setSubject] = useState("Quero contratar");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [state, action] = useActionState<ActionState, FormData>(sendContactAction, {});
+  const v = state.values ?? {};
+  const err = state.errors ?? {};
 
-  const body = `Nome: ${name}\nE-mail: ${email}\nEstabelecimento: ${business}\n\n${message}`;
-
-  function validate(): boolean {
-    if (name.trim().length < 2) return setError("Informe seu nome."), false;
-    if (!/^\S+@\S+\.\S+$/.test(email)) return setError("Informe um e-mail válido para a resposta."), false;
-    if (message.trim().length < 10) return setError("Conte um pouco mais na mensagem (mínimo de 10 caracteres)."), false;
-    setError(null);
-    return true;
-  }
-
-  function sendEmail(e: React.FormEvent) {
-    e.preventDefault();
-    if (!validate()) return;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`[${subject}] ${business || name}`)}&body=${encodeURIComponent(body)}`;
-  }
-
-  function sendWhatsApp() {
-    if (!validate()) return;
-    window.open(`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`${subject}\n\n${body}`)}`, "_blank", "noopener");
-  }
-
-  const field = "mt-1.5 w-full rounded-xl border border-line bg-surface px-3.5 py-3 text-sm text-ink outline-none transition focus:border-accent";
+  if (state.ok) return <FormAlert tone="success">{state.message}</FormAlert>;
 
   return (
-    <form onSubmit={sendEmail} noValidate className="space-y-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="block text-sm font-medium text-ink">
-          Nome
-          <input className={field} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-        </label>
-        <label className="block text-sm font-medium text-ink">
-          E-mail
-          <input className={field} type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+    <form action={action} noValidate className="space-y-5">
+      <div aria-hidden className="absolute -left-[9999px] h-0 overflow-hidden">
+        <label>
+          Site
+          <input name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
+      {state.message && <FormAlert tone="error">{state.message}</FormAlert>}
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="block text-sm font-medium text-ink">
-          Estabelecimento (opcional)
-          <input className={field} value={business} onChange={(e) => setBusiness(e.target.value)} autoComplete="organization" />
-        </label>
+        <Field label="Nome" name="name" autoComplete="name" required defaultValue={v.name} error={err.name} />
+        <Field label="E-mail" name="email" type="email" autoComplete="email" required defaultValue={v.email} error={err.email} />
+      </div>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field label="Estabelecimento (opcional)" name="business" autoComplete="organization" defaultValue={v.business} error={err.business} />
         <label className="block text-sm font-medium text-ink">
           Assunto
-          <select className={field} value={subject} onChange={(e) => setSubject(e.target.value)}>
-            <option>Quero contratar</option>
-            <option>Criação personalizada do cardápio</option>
-            <option>Dúvida sobre planos</option>
-            <option>Suporte técnico</option>
-            <option>Outro assunto</option>
+          <select name="subject" defaultValue={v.subject ?? SUBJECTS[0]} className={`${inputClass} mt-1.5`}>
+            {SUBJECTS.map((s) => (
+              <option key={s}>{s}</option>
+            ))}
           </select>
         </label>
       </div>
-      <label className="block text-sm font-medium text-ink">
-        Mensagem
-        <textarea className={`${field} min-h-36 resize-y`} value={message} onChange={(e) => setMessage(e.target.value)} required />
-      </label>
-      {error && (
-        <p role="alert" className="text-sm font-medium text-red-700 dark:text-red-400">
-          {error}
-        </p>
-      )}
-      <div className="flex flex-wrap gap-3">
-        <button type="submit" className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-ink transition hover:opacity-90">
-          Enviar por e-mail
-        </button>
-        {site.whatsapp && (
-          <button type="button" onClick={sendWhatsApp} className="rounded-full border border-line px-6 py-3 text-sm font-semibold text-ink">
-            Enviar pelo WhatsApp
-          </button>
-        )}
-      </div>
-      <p className="text-xs text-muted">Ao enviar, sua mensagem abre no seu aplicativo de e-mail, pronta para envio.</p>
+      <TextArea label="Mensagem" name="message" rows={6} required defaultValue={v.message} error={err.message} />
+      <SubmitButton pendingLabel="Enviando…">Enviar mensagem</SubmitButton>
     </form>
   );
 }

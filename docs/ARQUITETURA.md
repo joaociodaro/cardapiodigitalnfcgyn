@@ -52,10 +52,14 @@ pedido) dentro do aparelho simulado.
 
 ### 3. "Usar este modelo" copia, nunca referencia
 
-Ao criar um cardápio, o `demo_document` e o `default_theme` do modelo são
-copiados para as tabelas do cliente, com `template_version` registrada. O
-modelo original nunca é alterado, e atualizar um modelo no admin não muda
-cardápios já personalizados.
+O conteúdo demonstrativo de cada modelo vive no código, ao lado do layout
+(`src/templates/<slug>/definition.ts`). A tabela `menu_templates` guarda os
+metadados comerciais controlados pelo admin (ativo, ordem, plano, imagem de
+vitrine) e o tema padrão.
+
+Ao criar um cardápio, o servidor copia o conteúdo do modelo para as tabelas
+do cliente e registra `template_version`. O modelo original nunca é alterado,
+e atualizar um modelo não muda cardápios já personalizados.
 
 ### 4. Rascunho × publicado
 
@@ -84,8 +88,9 @@ Toda liberação de recurso passa por `licenses`:
 | `purchase` | pagamento único aprovado | até `hosting_until` (padrão: 12 meses, configurável por plano) |
 | `admin_grant` | concedida no painel administrativo | definida pelo admin |
 
-Uma função de servidor `getEntitlements(establishmentId)` (etapa 6) combina
-licença, plano e `limits_override` e é chamada em toda ação sensível: publicar,
+`computeEntitlements()` (`src/lib/entitlements.ts`) combina licença, plano,
+assinatura e `limits_override`; o painel a usa via `getDashboardContext()` e
+ela é chamada em toda ação sensível: publicar,
 usar modelo premium, criar o segundo cardápio, habilitar pedidos pelo WhatsApp.
 O frontend apenas reflete a decisão; nenhum recurso é liberado no navegador.
 
@@ -110,6 +115,11 @@ adicionar outros gateways depois. Dados de cartão nunca passam pelo nosso
 servidor.
 
 ### 8. Multi-tenant e administração
+
+- Estabelecimentos são criados pela função `create_establishment()`, que cria
+  também o vínculo de proprietário na mesma transação.
+- Funções auxiliares de autorização não são executáveis por visitantes
+  anônimos; consultas anônimas a tabelas privadas são negadas explicitamente.
 
 - Dados privados pertencem a um `establishment`; o acesso é decidido por
   `establishment_members` via funções `is_member()` e `member_role_of()`.
@@ -166,8 +176,8 @@ docs/                     este documento
 | --- | --- | --- |
 | 1 | Estrutura, identidade visual, landing e páginas públicas | ✅ |
 | 2 | 10 modelos navegáveis, busca, detalhe do produto, pedido pelo WhatsApp | ✅ |
-| 3 | Supabase Auth, cadastro/login/recuperação, estabelecimento, painel base | próxima |
-| 4 | Editor visual: cores, fontes, imagens, layout, produtos, categorias, autosave | |
+| 3 | Supabase Auth, cadastro/login/recuperação, estabelecimento, painel do cliente | ✅ |
+| 4 | Editor visual: cores, fontes, imagens, layout, produtos, categorias, autosave | próxima |
 | 5 | Publicação, `/menu/[slug]`, QR Code (PNG/SVG/impressão), estatísticas | |
 | 6 | Mercado Pago: checkout, assinaturas, webhooks, licenças, inadimplência | |
 | 7 | Painel administrativo: financeiro, clientes, modelos, planos, cupons, auditoria | |

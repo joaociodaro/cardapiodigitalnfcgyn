@@ -10,8 +10,9 @@
 --  * Cardápio público lê apenas o snapshot publicado (menu_versions).
 -- =====================================================================
 
-create extension if not exists "pgcrypto";
-create extension if not exists "citext";
+create schema if not exists extensions;
+create extension if not exists "pgcrypto" with schema extensions;
+create extension if not exists "citext" with schema extensions;
 
 -- ---------------------------------------------------------------------
 -- Tipos
@@ -31,7 +32,7 @@ create type public.support_status as enum ('open', 'in_progress', 'resolved', 'c
 -- Utilidades
 -- ---------------------------------------------------------------------
 create or replace function public.set_updated_at() returns trigger
-language plpgsql as $$
+language plpgsql set search_path = public as $$
 begin
   new.updated_at = now();
   return new;
@@ -75,7 +76,7 @@ create table public.role_permissions (
 create table public.user_roles (
   user_id uuid references auth.users (id) on delete cascade,
   role_id smallint references public.roles (id) on delete cascade,
-  granted_by uuid references auth.users (id),
+  granted_by uuid references auth.users (id) on delete set null,
   granted_at timestamptz not null default now(),
   primary key (user_id, role_id)
 );
@@ -107,7 +108,7 @@ create table public.establishments (
   social_links jsonb not null default '{}'::jsonb,
   opening_hours jsonb not null default '[]'::jsonb,
   extra_info text,
-  created_by uuid references auth.users (id),
+  created_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -167,7 +168,7 @@ create trigger plans_updated before update on public.plans for each row execute 
 
 create table public.coupons (
   id uuid primary key default gen_random_uuid(),
-  code citext not null unique,
+  code extensions.citext not null unique,
   description text,
   discount_type public.discount_type not null,
   discount_value integer not null check (discount_value > 0),
@@ -232,7 +233,7 @@ create table public.licenses (
   hosting_until timestamptz,                -- null = enquanto a assinatura estiver ativa
   limits_override jsonb,                    -- ajustes manuais do admin
   notes text,
-  granted_by uuid references auth.users (id),
+  granted_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -303,7 +304,7 @@ create table public.menus (
   template_id uuid not null references public.menu_templates (id),
   template_version integer not null,          -- versão do modelo no momento da cópia
   name text not null,
-  slug citext not null unique check (slug ~ '^[a-z0-9](?:[a-z0-9-]{1,58}[a-z0-9])$'),
+  slug extensions.citext not null unique check (slug ~ '^[a-z0-9](?:[a-z0-9-]{1,58}[a-z0-9])$'),
   status public.menu_status not null default 'draft',
   settings jsonb not null default '{"whatsappOrders":false,"whatsappButton":true,"showSearch":true}'::jsonb,
   published_version_id uuid,                  -- fk adicionada abaixo
@@ -317,7 +318,7 @@ create trigger menus_updated before update on public.menus for each row execute 
 
 -- Slugs antigos continuam redirecionando para o cardápio
 create table public.menu_slug_history (
-  slug citext primary key,
+  slug extensions.citext primary key,
   menu_id uuid not null references public.menus (id) on delete cascade,
   replaced_at timestamptz not null default now()
 );
@@ -391,7 +392,7 @@ create table public.menu_versions (
   document jsonb not null,                   -- MenuDocument completo
   theme jsonb not null,                      -- ThemeConfig
   template_slug text not null,
-  published_by uuid references auth.users (id),
+  published_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
   unique (menu_id, version_number)
 );
@@ -408,7 +409,7 @@ create table public.media_assets (
   size_bytes integer not null check (size_bytes > 0 and size_bytes <= 5242880),
   width integer,
   height integer,
-  created_by uuid references auth.users (id),
+  created_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
   unique (bucket, path)
 );
@@ -453,7 +454,7 @@ create table public.support_requests (
   establishment_id uuid references public.establishments (id) on delete set null,
   user_id uuid references auth.users (id) on delete set null,
   name text not null,
-  email citext not null,
+  email extensions.citext not null,
   subject text not null,
   message text not null check (char_length(message) between 10 and 5000),
   status public.support_status not null default 'open',
@@ -481,7 +482,7 @@ create index audit_logs_target_idx on public.audit_logs (target_type, target_id)
 create table public.platform_settings (
   key text primary key,
   value jsonb not null,
-  updated_by uuid references auth.users (id),
+  updated_by uuid references auth.users (id) on delete set null,
   updated_at timestamptz not null default now()
 );
 
@@ -628,7 +629,7 @@ $$;
 
 create or replace function public.get_published_menu(p_slug text)
 returns table (menu_id uuid, slug text, template_slug text, document jsonb, theme jsonb, available boolean, redirect_to text)
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare
   m public.menus%rowtype;
 begin

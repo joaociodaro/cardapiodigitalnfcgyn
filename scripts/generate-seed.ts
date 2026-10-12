@@ -58,16 +58,16 @@ out.push(
 out.push("on conflict (code) do nothing;");
 out.push("");
 
-out.push("insert into public.menu_templates (slug, name, segment, description, preview_image_url, tier, version, default_theme, demo_document, sort_order) values");
+out.push("insert into public.menu_templates (slug, name, segment, description, preview_image_url, tier, version, default_theme, sort_order) values");
 out.push(
   TEMPLATES.map(
     (t, i) =>
-      `  (${q(t.meta.slug)}, ${q(t.meta.name)}, ${q(t.meta.segment)}, ${q(t.meta.description)}, ${q(t.meta.previewImage)}, ${q(t.meta.tier)}, ${t.meta.version}, ${j(t.theme)}, ${j(t.demo)}, ${i})`,
+      `  (${q(t.meta.slug)}, ${q(t.meta.name)}, ${q(t.meta.segment)}, ${q(t.meta.description)}, ${q(t.meta.previewImage)}, ${q(t.meta.tier)}, ${t.meta.version}, ${j(t.theme)}, ${i})`,
   ).join(",\n"),
 );
 out.push("on conflict (slug) do update set");
 out.push("  name = excluded.name, segment = excluded.segment, description = excluded.description,");
-out.push("  version = excluded.version, default_theme = excluded.default_theme, demo_document = excluded.demo_document;");
+out.push("  version = excluded.version, default_theme = excluded.default_theme;");
 out.push("");
 out.push("insert into public.platform_settings (key, value) values");
 out.push(`  ('billing', ${j({ grace_days: 7, suspend_after_days: 7, delete_data: false })})`);

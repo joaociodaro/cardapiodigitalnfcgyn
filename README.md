@@ -6,22 +6,25 @@ partir de modelos prontos. "Carta" é um nome provisório: troque em
 
 A arquitetura está descrita em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 
-## O que já funciona (etapas 1 e 2)
+## O que já funciona
 
-- Landing page completa, com demonstração ao vivo dentro de um celular e troca de modelo.
-- Páginas públicas: como funciona, modelos (com filtro), planos (mensal e pagamento único,
-  tabela comparativa), perguntas frequentes, contato, termos e privacidade.
-- **10 modelos de cardápio**, cada um com layout, tipografia e paleta próprios, 5 ou mais
-  categorias e produtos fictícios com fotos, descrições, preços, variações, adicionais e alergênicos.
-- Demonstração em `/modelos/[slug]` com simulação de celular, tablet e tela cheia.
-- Em todos os modelos: navegação por categorias com destaque automático, busca sem acentos,
-  detalhe do produto, itens indisponíveis, informações do estabelecimento e montagem de pedido
-  com mensagem pronta para o WhatsApp.
-- Tema claro e escuro na plataforma, SEO (metadados, sitemap, robots, FAQ estruturado), 404.
-- Schema completo do banco com RLS, seed gerado a partir do código e testes de isolamento.
+**Etapas 1 e 2 — site e modelos**
+- Landing page com demonstração ao vivo dentro de um celular e troca de modelo.
+- Páginas públicas: como funciona, modelos (com filtro), planos, perguntas frequentes, contato, termos e privacidade.
+- **10 modelos de cardápio** com layout, tipografia e paleta próprios, navegáveis em `/modelos/[slug]`
+  com simulação de celular, tablet e tela cheia; busca, detalhe do produto e pedido pelo WhatsApp.
 
-Ainda **não** estão ligados (próximas etapas): login/cadastro, editor, publicação real, QR Code,
-pagamentos e painel administrativo. As telas de login e cadastro mostram um aviso enquanto isso.
+**Etapa 3 — contas e painel**
+- Cadastro com confirmação de e-mail, login, logout, recuperação e redefinição de senha (Supabase Auth).
+- Sessão renovada no servidor; `/dashboard` e `/admin` exigem login.
+- Onboarding: criação do estabelecimento, preservando o modelo e o plano escolhidos na vitrine.
+- Painel com os 12 itens do menu: visão geral, cardápios, modelos (com o que o plano libera),
+  assinatura, pagamentos, configurações (estabelecimento, conta, senha, sessões, exclusão de conta) e suporte.
+- Vários estabelecimentos por conta, com troca rápida.
+- Direitos de uso calculados no servidor a partir das licenças (`src/lib/entitlements.ts`).
+- Formulário de contato e suporte gravando no banco.
+
+**Próximas etapas:** editor visual (4), publicação e QR Code (5), Mercado Pago (6), painel administrativo (7).
 
 ## Rodando localmente
 
@@ -29,7 +32,7 @@ Requer Node 20.9 ou superior.
 
 ```bash
 npm install
-cp .env.example .env.local   # nesta etapa só NEXT_PUBLIC_SITE_URL é usada
+cp .env.example .env.local   # preencha com os dados do seu projeto Supabase
 npm run dev                  # http://localhost:3000
 ```
 
@@ -39,34 +42,62 @@ npm run dev                  # http://localhost:3000
 | --- | --- |
 | `npm run dev` | servidor de desenvolvimento |
 | `npm run build` | build de produção |
-| `npm run typecheck` | verificação de tipos |
-| `npm run lint` | ESLint |
-| `npm test` | testes de regras de pedido e integridade dos 10 modelos |
-| `npm run db:seed` | regenera `supabase/seed.sql` a partir de planos e modelos do código |
-| `npm run test:db` | aplica migration + seed num Postgres de teste e roda os testes de RLS (precisa de `DATABASE_URL`) |
+| `npm run typecheck` / `npm run lint` | verificação de tipos e ESLint |
+| `npm test` | testes de pedidos, direitos de uso, validação de formulários e integridade dos modelos |
+| `npm run test:db` | aplica as migrations num Postgres de teste e roda os testes de RLS (precisa de `DATABASE_URL`) |
+| `npm run db:seed` | regenera `supabase/seed.sql` (planos e metadados dos modelos) a partir do código |
+| `npm run db:types` | regenera os tipos TypeScript do banco (precisa de `DATABASE_URL`) |
 
-## Banco de dados (Supabase)
+## Supabase
 
-1. Crie um projeto em supabase.com.
-2. Em **SQL Editor**, execute `supabase/migrations/20261011000000_initial_schema.sql` e depois `supabase/seed.sql`
-   (ou use a Supabase CLI: `supabase db push` e `supabase db reset`).
-3. Copie a URL e as chaves para `.env.local`.
+O projeto `cardapio-digital` (região São Paulo) já está com as migrations e o seed aplicados.
+Para um projeto novo: execute os arquivos de `supabase/migrations/` em ordem e depois `supabase/seed.sql`.
+Os arquivos em `supabase/tests/` são só para testes locais — **não** execute `00_supabase_stub.sql` no Supabase.
 
-Os arquivos em `supabase/tests/` são apenas para testes locais. **Não** execute
-`00_supabase_stub.sql` no projeto Supabase.
+### Configuração obrigatória de autenticação (painel do Supabase)
+
+1. **Authentication → URL Configuration**
+   - *Site URL*: o endereço do site em produção (ex.: `https://seudominio.com.br`).
+   - *Redirect URLs*: `http://localhost:3000/**` e `https://seudominio.com.br/**`
+     (e o domínio da Vercel, ex.: `https://*.vercel.app/**`, se for testar por lá).
+2. **Authentication → Emails → SMTP Settings**: configure um SMTP próprio (Resend, Brevo, Amazon SES…).
+   O envio padrão do Supabase só entrega para e-mails da equipe do projeto e tem limite baixo por hora,
+   então clientes reais não receberiam a confirmação de cadastro.
+3. (Opcional) **Authentication → Emails → Templates**: traduza os textos dos e-mails para português.
+
+### Tornar-se administrador
+
+Depois de criar sua conta pelo site, rode no SQL Editor (trocando o e-mail):
+
+```sql
+insert into public.user_roles (user_id, role_id)
+select u.id, r.id from auth.users u, public.roles r
+where u.email = 'seu-email@exemplo.com' and r.code = 'platform_admin';
+```
+
+### Liberar um plano manualmente (até a etapa de pagamentos)
+
+```sql
+insert into public.licenses (establishment_id, plan_id, source, hosting_until, notes)
+select e.id, p.id, 'admin_grant', now() + interval '12 months', 'Pagamento manual'
+from public.establishments e, public.plans p
+where e.name = 'Nome do estabelecimento' and p.code = 'premium';
+```
 
 ## Variáveis de ambiente
 
-Veja `.env.example`. Resumo:
+Veja `.env.example`. Configure as mesmas na Vercel.
 
 | Variável | Onde obter | Etapa |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | domínio do site | 1 |
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API | 3 |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API (somente servidor) | 3 |
-| `MERCADOPAGO_ACCESS_TOKEN`, `NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY` | Mercado Pago → Suas integrações → Credenciais | 6 |
-| `MERCADOPAGO_WEBHOOK_SECRET` | Mercado Pago → Webhooks | 6 |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API Keys | 3 |
+| `SUPABASE_SECRET_KEY` | Supabase → Project Settings → API Keys → Secret keys (**somente servidor**) | 3 |
+| `MERCADOPAGO_ACCESS_TOKEN`, `NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY`, `MERCADOPAGO_WEBHOOK_SECRET` | Mercado Pago → Suas integrações | 6 |
 | `PLATFORM_ADMIN_EMAIL` | seu e-mail de administrador | 7 |
+
+Sem `SUPABASE_SECRET_KEY`, a exclusão de conta anonimiza e bloqueia o acesso, mas o login só é
+removido definitivamente quando a chave estiver configurada.
 
 ## Antes de publicar
 
