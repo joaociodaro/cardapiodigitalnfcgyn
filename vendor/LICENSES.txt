@@ -1,0 +1,2 @@
+supabase.js / 591.supabase.js - @supabase/supabase-js 2.45.4 - MIT License - https://github.com/supabase/supabase-js
+qrcode.min.js - qrcodejs - MIT License, Copyright (c) 2012 davidshimjs - https://github.com/davidshimjs/qrcodejs

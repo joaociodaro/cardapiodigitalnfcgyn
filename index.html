@@ -8,12 +8,17 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-eFsJEZR8ApalrC6rYd9UfViwgPzC675j23IBcS3Xee8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Cardápio NFC</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;600&family=Syne:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:wght@500;700&family=Lora:wght@400;600&family=DM+Serif+Display&family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&family=Caveat:wght@600;700&display=swap">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="preconnect" href="https://dggndoawdutlkmikmxyh.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="vendor/qrcode.min.js"></script>
+<script src="vendor/supabase.js"></script>
 <style>
 /* Layout: uma vitrine de loja — faixas largas, páginas de clientes expostas como produtos em celulares */
 :root{
@@ -704,20 +709,20 @@ function toUser(p){
     role:p.role||'cliente', reseller_id:p.reseller_id||null, client_limit:p.client_limit||0, clients:p.clients||0, brand_name:p.brand_name||'', brand_url:p.brand_url||'',
     sub: p.access_until ? { plan:p.plan==='free'?'admin':p.plan, until:p.access_until, mode:p.pay_mode, method:p.pay_method, renew:false } : null };
 }
-function fromRow(r, brand){ return { _brand: brand||db.brand||null, id:r.id, owner:r.owner, slug:r.slug, name:r.name, published:r.published, whatsapp:r.whatsapp||'', theme:{...defTheme(), ...(r.theme||{})}, mods:Array.isArray(r.mods)&&r.mods.length?r.mods:[mkMod('capa',{title:r.name})], free:r.is_free, stats:{views:r.views||0, clicks:r.clicks||0}, _savedSlug:r.slug }; }
+function fromRow(r, brand){ return sanitizePage({ _brand: brand||db.brand||null, id:r.id, owner:r.owner, slug:r.slug, name:r.name, published:r.published, whatsapp:r.whatsapp||'', theme:{...defTheme(), ...(r.theme||{})}, mods:Array.isArray(r.mods)&&r.mods.length?r.mods:[mkMod('capa',{title:r.name})], free:r.is_free, stats:{views:r.views||0, clicks:r.clicks||0}, _savedSlug:r.slug }); }
 const toRow = p => ({ slug:p.slug, name:p.name, published:!!p.published, whatsapp:p.whatsapp||'', theme:p.theme, mods:p.mods, updated_at:new Date().toISOString() });
 async function loadSession(){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ db.session=null; db.users={}; db.pages=[]; db.pending=[]; return; }
   const id=session.user.id;
-  const [prof, pages, pend] = await Promise.all([
+  const [prof, pages, pend, brandR] = await Promise.all([
     sb.from('profiles').select('*').eq('id',id).single(),
     sb.from('pages').select('*').eq('owner',id).order('created_at'),
-    sb.from('payment_requests').select('*').eq('user_id',id).eq('status','pendente').order('created_at',{ascending:false})
+    sb.from('payment_requests').select('*').eq('user_id',id).eq('status','pendente').order('created_at',{ascending:false}),
+    sb.rpc('page_brand',{p_owner:id}).then(r=>r,()=>null)
   ]);
   if(prof.error){ db.session=null; return; }
-  db.session=id; db.users={[id]:toUser(prof.data)};
-  try{ const br=await sb.rpc('page_brand',{p_owner:id}); db.brand=br.data||null; }catch(e){ db.brand=null; }
+  db.session=id; db.users={[id]:toUser(prof.data)}; db.brand=(brandR&&brandR.data)||null;
   db.pages=(pages.data||[]).map(r=>fromRow(r)); db.pending=pend.data||[];
 }
 async function api(action, payload={}){
@@ -779,6 +784,9 @@ const FONTS = {
   amigavel:  {name:'Amigável',  h:"'Poppins',system-ui,sans-serif", b:"'Poppins',system-ui,sans-serif"},
   manuscrita:{name:'Manuscrita',h:"'Caveat',cursive", b:"'Nunito',system-ui,sans-serif"}
 };
+const FONT_CSS = { editorial:'Fraunces:opsz,wght@9..144,400;600', expressiva:'Syne:wght@500;700', classica:'Playfair+Display:wght@500;700&family=Lora:wght@400;600', elegante:'DM+Serif+Display&family=Montserrat:wght@400;600;700', forte:'Oswald:wght@500;600&family=Nunito:wght@400;600;700', amigavel:'Poppins:wght@400;600;700', manuscrita:'Caveat:wght@600;700&family=Nunito:wght@400;600;700' };
+const FONT_LOADED = {};
+function ensureFont(k){ if(!FONT_CSS[k] || FONT_LOADED[k]) return; FONT_LOADED[k]=1; try{ const l=document.createElement('link'); l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family='+FONT_CSS[k]+'&display=swap'; document.head.appendChild(l); }catch(e){} }
 const PHOTOSHAPE = {arred:'Arredondada', quadrado:'Quadrada', circulo:'Círculo'};
 const MENULAYOUT = {lista:'Lista com foto', grade:'Grade', cartoes:'Cartões grandes', compacto:'Compacta', classico:'Clássica'};
 const WEEK = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
@@ -790,9 +798,61 @@ const SURFACES = {cartoes:'Cartões', livre:'Livre', contorno:'Contorno', elevad
 const BTNS = {reto:'Reto', suave:'Suave', pilula:'Pílula'};
 const BTNFILL = {cheio:'Preenchido', contorno:'Contorno'};
 const BGS = {solido:'Sólido', luz:'Luz', dividido:'Dividido', lavado:'Lavado'};
-const defTheme = (look='claro') => ({look, ...pick(LOOKS[look]), font:'moderna', size:'equilibrado', width:'padrao', spacing:'equilibrado', surface:'cartoes', btn:'suave', btnFill:'cheio', radius:16, bgStyle:'solido', bgInt:30, photo:'arred', bgImage:''});
-function normTheme(t){ if(!t) return defTheme(); if(BGS[t.bg]){ t.bgStyle=t.bg; t.bg=(LOOKS[t.look]||LOOKS.claro).bg; } if(!t.bgStyle) t.bgStyle='solido'; if(!t.photo) t.photo='arred'; return t; }
-function pick(l){ return {bg:l.bg, surface:l.surface, text:l.text, accent:l.accent}; }
+const defTheme = (look='claro') => ({look, ...pick(LOOKS[look]), font:'moderna', size:'equilibrado', width:'padrao', spacing:'equilibrado', surface:'cartoes', btn:'suave', btnFill:'cheio', radius:16, bgStyle:'solido', bgInt:30, photo:'arred', bgImage:'', surface:'cartoes'});
+/* ---------- blindagem: todo conteúdo de página passa por aqui antes de aparecer ---------- */
+const HEX_RE=/^#[0-9a-fA-F]{3,8}$/, ID_RE=/^[\w-]{1,40}$/;
+const cleanId = v => ID_RE.test(String(v??'')) ? String(v) : uid();
+const cleanStr = (v,n=4000) => v==null ? '' : String(v).slice(0,n);
+function cleanUrl(u){
+  u=String(u||'').trim();
+  if(u.length<=3000000 && /^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(u)) return u;
+  if(u.length<=2000 && /^https:\/\/[^\s"'()<>\\`]+$/.test(u)) return u;
+  if(/^img\/[\w.-]+$/.test(u)) return u;
+  return '';
+}
+const KNOWN_ILL = n => typeof n==='string' && (!!PHOTOS[n] || !!(typeof ILLS!=='undefined' && ILLS[n]));
+function cleanData(v, key, depth){
+  if(depth>7) return null;
+  if(key==='id') return cleanId(v);
+  if(['image','logo','photo'].includes(key)) return cleanUrl(v);
+  if(key==='icon'){ const x=String(v||''); return x.startsWith('i:') ? (LINK_ICONS[x.slice(2)]?x:'') : cleanUrl(x); }
+  if(key==='images') return Array.isArray(v) ? v.slice(0,40).map(cleanUrl).filter(Boolean) : [];
+  if(key==='ills') return Array.isArray(v) ? v.slice(0,12).filter(a=>Array.isArray(a)&&KNOWN_ILL(a[0])).map(a=>[a[0],cleanStr(a[1],40)]) : undefined;
+  if(key==='ill') return KNOWN_ILL(v) ? v : '';
+  if(key==='tone') return HEX_RE.test(v||'') ? v : '#1652E0';
+  if(key==='tag') return Object.prototype.hasOwnProperty.call(TAGS, v||'') ? (v||'') : '';
+  if(key==='layout') return MENULAYOUT[v] ? v : 'lista';
+  if(key==='photos' && v && typeof v==='object' && !Array.isArray(v)){ const o={}; Object.keys(v).slice(0,200).forEach(k=>{ if(/^\d{1,3}$/.test(k)) o[k]=cleanUrl(v[k]); }); return o; }
+  if(typeof v==='string') return cleanStr(v, key==='text'||key==='items'||key==='services'||key==='opts'?8000:2000);
+  if(typeof v==='number') return Number.isFinite(v) ? v : 0;
+  if(typeof v==='boolean' || v==null) return v;
+  if(Array.isArray(v)) return v.slice(0,300).map(x=>cleanData(x, '', depth+1));
+  if(typeof v==='object'){ const o={}; Object.keys(v).slice(0,60).forEach(k=>{ if(/^[\w.@-]{1,40}$/.test(k)){ const c=cleanData(v[k], k, depth+1); if(c!==undefined) o[k]=c; } }); return o; }
+  return null;
+}
+function sanitizeTheme(t){
+  t = (t && typeof t==='object') ? {...t} : {};
+  if(BGS[t.bg]){ t.bgStyle=t.bg; delete t.bg; }
+  if(HEX_RE.test(t.surface||'')){ t.card=t.surface; delete t.surface; }
+  const look = LOOKS[t.look] ? t.look : 'claro', d=defTheme(look), o={...d};
+  o.look = LOOKS[t.look] ? t.look : '';
+  ['bg','card','text','accent'].forEach(k=>{ if(HEX_RE.test(t[k]||'')) o[k]=t[k]; });
+  [['font',FONTS],['size',SIZES],['width',WIDTHS],['spacing',SPACING],['surface',SURFACES],['btn',BTNS],['btnFill',BTNFILL],['bgStyle',BGS],['photo',PHOTOSHAPE]].forEach(([k,map])=>{ if(Object.prototype.hasOwnProperty.call(map, t[k])) o[k]=t[k]; });
+  o.radius = Math.min(30, Math.max(0, parseInt(t.radius ?? d.radius) || 0));
+  o.bgInt = Math.min(80, Math.max(5, parseInt(t.bgInt ?? d.bgInt) || 30));
+  o.bgImage = cleanUrl(t.bgImage);
+  return o;
+}
+function sanitizeMods(mods){
+  if(!Array.isArray(mods)) return [];
+  return mods.slice(0,60).filter(m=>m && typeof m==='object' && Object.prototype.hasOwnProperty.call(MODS, m.type)).map(m=>({
+    id:cleanId(m.id), type:m.type, v:Math.min(5,Math.max(1,parseInt(m.v)||1)), pad:['c','n','g'].includes(m.pad)?m.pad:'n',
+    accent:HEX_RE.test(m.accent||'')?m.accent:'', hidden:!!m.hidden, data:cleanData(m.data&&typeof m.data==='object'?m.data:{}, '', 0) || {}
+  }));
+}
+function sanitizePage(p){ if(!p) return p; p.theme=sanitizeTheme(p.theme); p.mods=sanitizeMods(p.mods); return p; }
+function normTheme(t){ if(!t) return defTheme(); if(BGS[t.bg]){ t.bgStyle=t.bg; t.bg=(LOOKS[t.look]||LOOKS.claro).bg; } if(HEX_RE.test(t.surface||'')){ t.card=t.surface; t.surface='cartoes'; } if(!HEX_RE.test(t.card||'')) t.card=(LOOKS[t.look]||LOOKS.claro).surface; if(!t.bgStyle) t.bgStyle='solido'; if(!t.photo) t.photo='arred'; if(!SURFACES[t.surface]) t.surface='cartoes'; if(!FONTS[t.font]) t.font='moderna'; if(!SIZES[t.size]) t.size='equilibrado'; if(!WIDTHS[t.width]) t.width='padrao'; if(!SPACING[t.spacing]) t.spacing='equilibrado'; return t; }
+function pick(l){ return {bg:l.bg, card:l.surface, text:l.text, accent:l.accent}; }
 
 /* ---------- módulos ---------- */
 const MODS = {
@@ -928,7 +988,7 @@ const S = { authTab:'entrar', authErr:'', co:{plan:'anual', mode:'vista', method
    RENDERIZAÇÃO DAS PÁGINAS DOS CLIENTES
    ========================================================= */
 function pageStyle(t){
-  return `--p-bg:${t.bg};--p-surface:${t.surface};--p-text:${t.text};--p-accent:${t.accent};--p-on:${onColor(t.accent)};--p-fh:${FONTS[t.font].h};--p-fb:${FONTS[t.font].b};--p-size:${SIZES[t.size][1]};--p-w:${WIDTHS[t.width][1]};--p-gap:${SPACING[t.spacing][1]};--p-r:${t.radius}px;--p-br:${t.btn==='reto'?'4px':t.btn==='pilula'?'999px':Math.round(t.radius*.6)+'px'};--p-int:${t.bgInt}%;--p-ph:${t.photo==='circulo'?'50%':t.photo==='quadrado'?'4px':'calc(var(--p-r) * .6)'}`;
+  return `--p-bg:${t.bg};--p-surface:${t.card};--p-text:${t.text};--p-accent:${t.accent};--p-on:${onColor(t.accent)};--p-fh:${FONTS[t.font].h};--p-fb:${FONTS[t.font].b};--p-size:${SIZES[t.size][1]};--p-w:${WIDTHS[t.width][1]};--p-gap:${SPACING[t.spacing][1]};--p-r:${t.radius}px;--p-br:${t.btn==='reto'?'4px':t.btn==='pilula'?'999px':Math.round(t.radius*.6)+'px'};--p-int:${t.bgInt}%;--p-ph:${t.photo==='circulo'?'50%':t.photo==='quadrado'?'4px':'calc(var(--p-r) * .6)'}`;
 }
 function pageFoot(p){
   const br=p._brand;
@@ -936,7 +996,7 @@ function pageFoot(p){
   return `<div class="pg-made">Feito com <a href="#inicio">Cardápio NFC</a></div>`;
 }
 function renderPage(p, ctx='view'){
-  const t=normTheme(p.theme);
+  const t=normTheme(p.theme); ensureFont(t.font);
   const bgi = t.bgImage ? `;background:linear-gradient(color-mix(in srgb,${t.bg} 84%,transparent),color-mix(in srgb,${t.bg} 84%,transparent)),url('${esc(t.bgImage)}') center/cover` : '';
   const mods = p.mods.filter(m=>!m.hidden || ctx==='edit');
   return `<div class="pg surf-${t.surface} bg-${t.bgStyle} ${t.btnFill==='contorno'?'btn-contorno':''}" style="${pageStyle(t)}${bgi}" data-pid="${p.id}" data-ctx="${ctx}">
@@ -1023,7 +1083,7 @@ function illFor(text, fallback){
   for(const [re,n] of map) if(re.test(t)) return n;
   return fallback;
 }
-const bgImg = u => `background-image:url('${u}')`;
+const bgImg = u => { const c = (typeof u==='string' && u.startsWith('data:image/svg+xml,')) ? u : cleanUrl(u); return c ? `background-image:url('${c}')` : ''; };
 
 function itemOpts(it){ return rows(it.opts).map(([n,pr])=>({name:n||'', price:pr||''})).filter(o=>o.name); }
 const isoDay = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
@@ -1347,7 +1407,7 @@ function viewLogin(){
       <form class="form" id="f-auth">
         ${t==='criar'?`<div class="field"><label for="a-nome">Nome</label><input type="text" id="a-nome" autocomplete="name" required></div>`:''}
         <div class="field"><label for="a-email">E-mail</label><input type="email" id="a-email" autocomplete="email" required></div>
-        <div class="field"><label for="a-senha">Senha</label><input type="password" id="a-senha" autocomplete="${t==='entrar'?'current-password':'new-password'}" minlength="6" required>${t==='criar'?'<span class="hint">Mínimo de 6 caracteres.</span>':''}</div>
+        <div class="field"><label for="a-senha">Senha</label><input type="password" id="a-senha" autocomplete="${t==='entrar'?'current-password':'new-password'}" minlength="${t==='entrar'?6:8}" maxlength="72" required>${t==='criar'?'<span class="hint">Mínimo de 8 caracteres. Use letras e números.</span>':''}</div>
         ${S.authErr?`<div class="err">${esc(S.authErr)}</div>`:''}
         <button class="btn btn-p btn-block" type="submit" ${S.busy?'disabled':''}>${S.busy?'Aguarde…':t==='entrar'?'Entrar':'Criar conta'}</button>
         ${t==='entrar'?`<p class="muted" style="font-size:14px">Esqueceu a senha? <a href="#contato">Fale com o suporte</a>.</p>`:''}
@@ -1387,7 +1447,7 @@ function viewAssinar(){
     ${u?'':`<section><h2>${c.plan!=='mensal'?'4':'3'}. Crie sua conta</h2><div class="form card">
       <div class="field"><label for="co-nome">Nome</label><input type="text" id="co-nome" autocomplete="name"></div>
       <div class="field"><label for="co-email">E-mail</label><input type="email" id="co-email" autocomplete="email"></div>
-      <div class="field"><label for="co-senha">Senha</label><input type="password" id="co-senha" minlength="6" autocomplete="new-password"></div>
+      <div class="field"><label for="co-senha">Senha</label><input type="password" id="co-senha" minlength="8" maxlength="72" autocomplete="new-password"></div>
       <p class="muted" style="font-size:14px">Já tem conta? <a href="#login">Entre primeiro</a>.</p></div></section>`}
   </div>
   <aside class="card sum"><div class="eyebrow">Resumo</div><h2 style="margin-top:8px">Plano ${P.name}</h2>
@@ -1447,7 +1507,7 @@ function viewEditor(id){
 }
 function segE(f,map,cur){ return `<div class="seg">${Object.entries(map).map(([k,v])=>`<button class="${cur===k?'on':''}" data-act="set" data-f="${f}" data-v="${k}">${Array.isArray(v)?v[0]:(v.name||v)}</button>`).join('')}</div>`; }
 function edSide(p){
-  const tab=S.edTab, t=normTheme(p.theme);
+  const tab=S.edTab, t=normTheme(p.theme); if(tab==='aparencia') Object.keys(FONT_CSS).forEach(ensureFont);
   let h = `<div class="etabs"><button class="${tab==='conteudo'?'on':''}" data-act="etab" data-v="conteudo">Conteúdo</button><button class="${tab==='aparencia'?'on':''}" data-act="etab" data-v="aparencia">Aparência</button><button class="${tab==='publicar'?'on':''}" data-act="etab" data-v="publicar">Publicar</button></div>`;
   if(tab==='conteudo'){
     h += `<div class="eyebrow">Conteúdo da página</div><div class="ed-h">Deixe do seu jeito.</div><div class="mlist">${p.mods.map((m,i)=>{const o=S.openMod===m.id, M=MODS[m.type];
@@ -1464,7 +1524,7 @@ function edSide(p){
   } else if(tab==='aparencia'){
     h += `<div class="eyebrow">Aparência</div><div class="ed-h">Prévia ao vivo.</div><div class="ctrl">
       <div><div class="lbl">Visual pronto</div><div class="swatches">${Object.entries(LOOKS).map(([k,l])=>`<button class="sw ${t.look===k?'on':''}" data-act="look" data-v="${k}" title="${l.name}" aria-label="Visual ${l.name}"><i style="background:${l.bg}"></i><i style="background:${l.accent}"></i></button>`).join('')}</div></div>
-      <div><div class="lbl">Cores</div><div class="colors">${[['bg','Fundo'],['surface','Módulos'],['text','Textos'],['accent','Destaques']].map(([k,l])=>`<label><input type="color" value="${t[k]}" data-f="theme:${k}"> ${l}</label>`).join('')}</div></div>
+      <div><div class="lbl">Cores</div><div class="colors">${[['bg','Fundo'],['card','Módulos'],['text','Textos'],['accent','Destaques']].map(([k,l])=>`<label><input type="color" value="${t[k]}" data-f="theme:${k}"> ${l}</label>`).join('')}</div></div>
       <div><div class="lbl">Tipografia</div>${segE('font',FONTS,t.font)}</div>
       <div><div class="lbl">Tamanho do texto</div>${segE('size',SIZES,t.size)}</div>
       <div><div class="lbl">Largura da página</div>${segE('width',WIDTHS,t.width)}</div>
@@ -1612,7 +1672,7 @@ function accStatus(u){
 }
 const fmtD = iso => new Date(iso).toLocaleDateString('pt-BR');
 const fmtDT = iso => new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-function genPw(){ const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s=''; const r=new Uint32Array(10); try{crypto.getRandomValues(r);}catch(e){ for(let i=0;i<10;i++) r[i]=Math.random()*1e9; } for(let i=0;i<10;i++) s+=c[r[i]%c.length]; return s; }
+function genPw(){ const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s=''; const r=new Uint32Array(12); try{crypto.getRandomValues(r);}catch(e){ for(let i=0;i<12;i++) r[i]=Math.random()*1e9; } for(let i=0;i<12;i++) s+=c[r[i]%c.length]; return s; }
 if(!S.adm) S.adm={q:'', f:'todas', n:1, unit:'meses', created:null, err:'', data:null, loading:false, state:null, role:'cliente', limit:10, res:''};
 const admMode = () => location.hash==='#revenda' ? 'revenda' : 'admin';
 
@@ -1678,7 +1738,7 @@ function viewAdmin(){
             resellers.length?`<div class="field"><label for="an-res">Revendedor responsável (opcional)</label><select id="an-res"><option value="">Nenhum (cliente direto)</option>${resellers.map(r=>`<option value="${r.id}" ${A.res===r.id?'selected':''}>${esc(r.name||r.email)}</option>`).join('')}</select></div>`:''}`}
           <div class="field"><label for="an-nome">${!RV&&A.role==='revendedor'?'Nome do revendedor':'Nome do cliente ou negócio'}</label><input type="text" id="an-nome" required></div>
           <div class="field"><label for="an-email">E-mail (login)</label><input type="email" id="an-email" required></div>
-          <div class="field"><label for="an-pw">Senha</label><div class="copyrow"><input type="text" id="an-pw" minlength="6" value="${genPw()}" required><button type="button" class="btn btn-g btn-s" data-act="admgen">Gerar</button></div></div>
+          <div class="field"><label for="an-pw">Senha</label><div class="copyrow"><input type="text" id="an-pw" minlength="8" maxlength="72" value="${genPw()}" required><button type="button" class="btn btn-g btn-s" data-act="admgen">Gerar</button></div></div>
           <div class="field"><label>Tempo de acesso</label>
             <div class="seg">${QUICK.map(([n,un,l])=>`<button type="button" class="${+A.n===n&&A.unit===un?'on':''}" data-act="admq" data-n="${n}" data-u="${un}">${l}</button>`).join('')}</div>
             <div class="dur"><input type="number" id="an-n" min="1" max="120" value="${A.n}" aria-label="Quantidade"><select id="an-unit" aria-label="Unidade"><option value="semanas" ${A.unit==='semanas'?'selected':''}>semanas</option><option value="meses" ${A.unit==='meses'?'selected':''}>meses</option></select></div>
@@ -1744,7 +1804,7 @@ function admAct(act, id, a){
     case 'admdateok': { const v=$('#md-date').value; if(!v){ toast('Escolha uma data'); return true; } admCall('admin_set_date',{id, date:v}, r=>`Vencimento definido para ${fmtD(r.until)}`); return true; }
     case 'admpw': admModal('Definir nova senha', `<p class="muted">${esc(u.name||u.email)}</p><div class="field"><label for="mp-pw">Nova senha</label><div class="copyrow"><input type="text" id="mp-pw" value="${genPw()}"><button type="button" class="btn btn-g btn-s" data-act="admgen2">Gerar</button></div><span class="hint">Copie e envie para o cliente antes de confirmar.</span></div>`, 'admpwok', id); return true;
     case 'admgen2': $('#mp-pw').value=genPw(); return true;
-    case 'admpwok': { const pw=$('#mp-pw').value; if(pw.length<6){ toast('A senha precisa ter pelo menos 6 caracteres'); return true; } admCall('admin_set_password',{id, password:pw}, 'Senha alterada'); return true; }
+    case 'admpwok': { const pw=$('#mp-pw').value; if(pw.length<8){ toast('A senha precisa ter pelo menos 8 caracteres'); return true; } admCall('admin_set_password',{id, password:pw}, 'Senha alterada'); return true; }
     case 'admblock': admCall('admin_block',{id, blocked:!u.blocked}, u.blocked?'Conta desbloqueada':'Conta bloqueada'); return true;
     case 'admdel': S.modal=confirmModal(`Excluir a conta de ${esc(u.name||u.email)} e todas as páginas dela?`,'admdelok',id); $('#modal-root').innerHTML=S.modal; return true;
     case 'admdelok': admCall('admin_delete',{id}, 'Conta excluída'); return true;
@@ -1915,7 +1975,7 @@ document.addEventListener('input', e=>{
   const el=e.target.closest('[data-f]'); if(!el||!el.dataset.f.includes(':')) return;
   const p=curPage(); if(!p) return;
   const [scope,a,b]=el.dataset.f.split(':');
-  if(scope==='theme'){ p.theme[a]= (a==='radius'||a==='bgInt') ? +el.value : el.value; if(a==='radius'&&$('#rv')) $('#rv').textContent=el.value+'px'; if(a==='bgInt'&&$('#iv')) $('#iv').textContent=el.value+'%'; if(['bg','surface','text','accent'].includes(a)) p.theme.look=''; }
+  if(scope==='theme'){ p.theme[a]= (a==='radius'||a==='bgInt') ? +el.value : el.value; if(a==='radius'&&$('#rv')) $('#rv').textContent=el.value+'px'; if(a==='bgInt'&&$('#iv')) $('#iv').textContent=el.value+'%'; if(['bg','card','text','accent'].includes(a)) p.theme.look=''; }
   else if(scope==='ord'){ const m=p.mods.find(x=>x.id===a); m.data.order=m.data.order||defOrder(); m.data.order[b]=el.value; }
   else if(scope==='lnk'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const l=linkItems(m.data).find(x=>x.id===parts[2]); l[parts[3]]=el.value; }
   else if(scope==='cat'||scope==='itm'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const sc=menuSecs(m.data).find(x=>x.id===parts[2]);
@@ -1994,7 +2054,7 @@ async function doPay(){
   refill();
   try{
     if(!me()){
-      if(!n||!em||pw.length<6) throw new Error('Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.');
+      if(!n||!em||pw.length<8) throw new Error('Preencha nome, e-mail e uma senha com pelo menos 8 caracteres.');
       await api('signup',{name:n,email:em,password:pw});
       const { error } = await sb.auth.signInWithPassword({ email:em, password:pw }); if(error) throw new Error('Conta criada, mas não foi possível entrar. Entre pela tela de login.');
       await loadSession();
@@ -2033,6 +2093,7 @@ function handleUpload(inp){
 
 /* ---------- início ---------- */
 async function boot(){
+  if(window.top!==window.self && !String(location.hash).startsWith('#p-')){ document.body.innerHTML='<p style="font:16px system-ui;padding:24px">Por segurança, abra o Cardápio NFC diretamente: <a href="'+location.href.replace(/"/g,'')+'" target="_top">'+location.host+'</a></p>'; return; }
   try{ await loadSession(); }catch(e){ console.error(e); }
   db.ready=true; render();
   sb.auth.onAuthStateChange((ev)=>{ if(ev==='SIGNED_OUT' && db.session){ db.session=null; db.users={}; db.pages=[]; render(); } });
