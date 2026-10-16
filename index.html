@@ -904,8 +904,8 @@ function renderMod(m,p,ctx){
     case 'capa': {
       const bg = d.image ? bgImg(d.image) : d.ill ? bgImg(illUrl(d.ill)) : `background:${g(d.tone||'#1652E0', `color-mix(in srgb, ${d.tone||'#1652E0'} 45%, #000)`)}`;
       const ini = (d.title||'?').trim().charAt(0).toUpperCase();
-      h = `<div class="cv-img" style="${bg}"><span class="lg">${esc(ini)}</span></div>
-        <div class="cv-tx" ${m.v!==2?'style="padding-top:14px"':''}>${d.kicker?`<span class="kick">${esc(d.kicker)}</span>`:''}
+      h = `<div class="cv-img" style="${bg}"></div>
+        <div class="cv-tx">${d.kicker?`<span class="kick">${esc(d.kicker)}</span>`:''}
         <h1>${esc(d.title)}</h1>${d.subtitle?`<p>${esc(d.subtitle)}</p>`:''}
         ${d.cta?`<a class="pb ${m.v===4?'':'inl'}" href="${esc(lnk(d.link))}" target="_blank" rel="noopener" data-click>${esc(d.cta)} <span>↗</span></a>`:''}</div>`;
       break; }
