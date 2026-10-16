@@ -428,6 +428,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .cv.v4 .lg{display:none}
 .lk{display:grid;gap:10px}
 .pm.v5 .lk{grid-template-columns:1fr 1fr}
+.lkb .lk-t{flex:1;min-width:0}
+.lkb.has-ic{justify-content:flex-start;gap:12px}
+.lk-ic{width:2em;height:2em;flex:none;border-radius:calc(var(--p-br) * .6);display:grid;place-items:center;background:color-mix(in srgb,currentColor 16%,transparent);background-size:cover;background-position:center}
+.pg[class] .lk-ic{border-radius:min(10px,var(--p-br))}
+.lk-ic svg{width:1.2em;height:1.2em}
+.pm.v5 .lkb.has-ic{gap:10px}
+.pm.v5 .lkb .lk-go{align-self:flex-end}
 .pm.v5 .lkb{flex-direction:column;align-items:flex-start;min-height:92px;justify-content:space-between}
 .mn{display:grid;gap:14px}
 .mn-i{display:flex;gap:12px;align-items:center}
@@ -453,6 +460,22 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .mn-i .ph{background-size:cover;background-position:center}
 .iph{display:grid;gap:8px}
 .med{display:grid;gap:14px}
+.led{display:grid;gap:10px}
+.lit-ed{border:1.5px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px;background:var(--bg2)}
+.lit-top{display:flex;gap:6px;align-items:center}
+.lit-top input{flex:1;min-width:0;font-weight:600}
+.ic-sq{width:42px;height:42px;flex:none;border-radius:10px;border:1.5px dashed var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--accent);padding:0;overflow:hidden}
+.ic-sq.set{border-style:solid;border-color:var(--accent);background:var(--soft)}
+.ic-sq svg{width:22px;height:22px}
+.ic-sq .lk-img{width:100%;height:100%;background-size:cover;background-position:center}
+.ic-plus{font-size:20px;font-weight:700;color:var(--muted)}
+.icpick{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:10px}
+.icpick-hd{display:grid;gap:2px}
+.icgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px}
+.icopt{height:40px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.icopt svg{width:20px;height:20px}
+.icopt.on{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+.icopt.none{grid-column:span 3;font-size:13px;font-weight:700}
 .msec-ed{border:1.5px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px;background:var(--bg2)}
 .msec-hd{display:flex;gap:6px;align-items:center}
 .msec-hd input{font-weight:700;font-size:16px;flex:1;min-width:0}
@@ -659,7 +682,7 @@ function pick(l){ return {bg:l.bg, surface:l.surface, text:l.text, accent:l.acce
 /* ---------- módulos ---------- */
 const MODS = {
   capa:        {label:'Capa',         v5:false, fields:[['kicker','Etiqueta'],['title','Nome / título'],['subtitle','Frase de apresentação','area'],['cta','Texto do botão'],['link','Link do botão (deixe vazio para WhatsApp)'],['tone','Cor da imagem (sem foto)','color'],['image','Foto de capa','img']]},
-  links:       {label:'Links',        v5:true,  fields:[['title','Título'],['items','Links — um por linha: Nome | endereço','area']]},
+  links:       {label:'Links',        v5:true,  fields:[['title','Título'],['links','Links','links']]},
   cardapio:    {label:'Cardápio',     v5:true,  fields:[['title','Título do cardápio'],['sections','Categorias e itens','menu']]},
   servicos:    {label:'Serviços',     v5:true,  fields:[['title','Título'],['items','Serviços (um por linha): Nome | Descrição | Preço','area'],['photos','Fotos dos serviços','photos']]},
   agendamento: {label:'Agendamento',  v5:false, fields:[['title','Título'],['services','Serviços oferecidos — um por linha','area'],['times','Horários disponíveis, separados por vírgula'],['closed','Dias fechados (ex.: dom, seg)']]},
@@ -672,7 +695,7 @@ const MODS = {
 function defData(t){
   return ({
     capa:{kicker:'Bem-vindo',title:'Nome do seu negócio',subtitle:'Conte em uma frase o que você faz de melhor.',cta:'Fale com a gente',link:'',tone:'#1652E0',image:'',ill:'mesa'},
-    links:{title:'Encontre a gente',items:'Instagram | instagram.com/seunegocio\nFalar no WhatsApp | wa.me/5511999999999\nNossa loja | seunegocio.com.br'},
+    links:{title:'Encontre a gente',links:[mkLink('Instagram','instagram.com/seunegocio','i:camera'),mkLink('Falar no WhatsApp','wa.me/5511999999999','i:conversa'),mkLink('Nossa loja','seunegocio.com.br')]},
     cardapio:{title:'Cardápio',sections:[
       mkSec('Entradas',[['Porção da casa','Para dividir','18']]),
       mkSec('Pratos principais',[['Prato da casa','Descrição curta do prato','32'],['Prato do dia','Pergunte a opção de hoje','28']]),
@@ -693,6 +716,36 @@ const TAGS = {'':'Nenhuma', mais:'Mais pedido', novo:'Novidade', veg:'Vegetarian
 function menuSecs(d){ // compatível com cardápios antigos (texto por linha)
   if(!d.sections){ d.sections=[{id:uid(), title:'', items:rows(d.items).map((r,i)=>mkItem(r[0],r[1]||'',r[2]||'',{photo:(d.photos&&d.photos[i])||''}))}]; delete d.items; delete d.photos; }
   return d.sections;
+}
+/* ---------- ícones dos links (desenho próprio, traço simples) ---------- */
+const LINK_ICONS = {
+  conversa:['Conversa','<path d="M4 18.5V6.8A2.8 2.8 0 0 1 6.8 4h10.4A2.8 2.8 0 0 1 20 6.8v6.4a2.8 2.8 0 0 1-2.8 2.8H8.5L4 18.5z"/><path d="M8.5 9.2h7M8.5 12h4.5"/>'],
+  telefone:['Telefone','<path d="M5.2 4h3.3l1.6 4-2.1 1.3a10.5 10.5 0 0 0 5.7 5.7l1.3-2.1 4 1.6v3.3A1.9 1.9 0 0 1 17 19.6 13.6 13.6 0 0 1 4.4 7 1.9 1.9 0 0 1 5.2 4z"/>'],
+  camera:['Fotos','<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor"/>'],
+  site:['Site','<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.6 5.2 3.6 8.5s-1.2 6.1-3.6 8.5c-2.4-2.4-3.6-5.2-3.6-8.5S9.6 5.9 12 3.5z"/>'],
+  loja:['Loja','<path d="M5 8h14l-1.2 11.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/>'],
+  local:['Endereço','<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>'],
+  email:['E-mail','<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4.5 7l7.5 6 7.5-6"/>'],
+  agenda:['Agenda','<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/>'],
+  cardapio:['Cardápio','<path d="M7 3.5v17M5 3.5v5a2 2 0 0 0 4 0v-5"/><path d="M16.5 20.5V3.5c-2 1-3.5 3.6-3.5 7 0 1.9 1.5 2.5 3.5 2.5"/>'],
+  entrega:['Entrega','<circle cx="6.5" cy="17" r="2.5"/><circle cx="17.5" cy="17" r="2.5"/><path d="M9 17h6M4 13l2-5h5l2 5M13.5 8h3l2.5 6.5"/>'],
+  video:['Vídeo','<rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="M10.5 9.3v5.4l4.5-2.7z" fill="currentColor"/>'],
+  musica:['Música','<path d="M9 17.5V6l10-2v11.5"/><circle cx="6.8" cy="17.5" r="2.3"/><circle cx="16.8" cy="15.5" r="2.3"/>'],
+  estrela:['Avaliações','<path d="M12 3.8l2.5 5.2 5.6.8-4 4 1 5.6-5.1-2.7-5.1 2.7 1-5.6-4-4 5.6-.8z"/>'],
+  coracao:['Favorito','<path d="M12 19.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 6.8a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10-7.5 10z"/>'],
+  cupom:['Promoção','<path d="M4 8.5V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5v2a3.5 3.5 0 0 0 0 7v2a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-2a3.5 3.5 0 0 0 0-7z"/><path d="M14 8v8" stroke-dasharray="1.6 1.6"/>'],
+  link:['Link','<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>']
+};
+const iconSvg = k => LINK_ICONS[k] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${LINK_ICONS[k][1]}</svg>` : '';
+const mkLink = (name='', url='', icon='') => ({id:uid(), name, url, icon});
+function linkItems(d){ // compatível com links antigos (texto por linha)
+  if(!Array.isArray(d.links)){ d.links = rows(d.items).map(([n,u])=>mkLink(n||'', u||'')); delete d.items; }
+  return d.links;
+}
+function iconHtml(ic){
+  if(!ic) return '';
+  if(ic.startsWith('i:')) return `<span class="lk-ic">${iconSvg(ic.slice(2))}</span>`;
+  return `<span class="lk-ic lk-img" style="background-image:url('${esc(ic)}')"></span>`;
 }
 const mkMod = (type, data={}, extra={}) => ({id:uid(), type, v:1, pad:'n', accent:'', data:{...defData(type), ...data}, ...extra});
 
@@ -721,7 +774,7 @@ const DEMOS = [
       mkMod('galeria',{title:'Nosso ambiente',images:[],ills:[['chef','Preparo na hora'],['combinado','Combinados'],['interior3','Salão'],['niguiri2','Niguiris']]}),
       mkMod('horarios',{items:'Terça a sexta | 18h às 23h\nSábado e domingo | 12h às 23h\nSegunda | Fechado'}),
       mkMod('localizacao',{address:'Rua das Laranjeiras, 210 — Liberdade, São Paulo/SP',ref:'A duas quadras do metrô'}),
-      mkMod('links',{title:'Siga a gente',items:'Instagram | @saboroiental\nPedir no WhatsApp | wa.me/5511999999999'})
+      mkMod('links',{title:'Siga a gente',links:[mkLink('Instagram','@saboroiental','i:camera'),mkLink('Pedir no WhatsApp','wa.me/5511999999999','i:conversa'),mkLink('Avalie a gente','g.page/saboroiental')]})
     ]},
   { id:'demo2', slug:'cafe-aurora', name:'Café Aurora', published:true, whatsapp:'11988887777', demo:true,
     theme:{...defTheme('ceu'), font:'editorial', bg:'dividido', bgInt:22, btn:'pilula'},
@@ -733,12 +786,12 @@ const DEMOS = [
         mkSec('Gelados',[['Açaí na tigela','Banana, granola e frutas','24'],['Picolé artesanal','Frutas da estação','9']])]}),
       mkMod('agendamento',{title:'Reserve sua mesa',services:'Mesa para 2\nMesa para 4\nAniversário',times:'09:00, 11:00, 15:00, 17:00',closed:'seg'}),
       mkMod('galeria',{title:'Nosso espaço',images:[],ills:[['interior1','Salão'],['interior2','Balcão'],['torta','Doces'],['smoothie','Bowls']]}),
-      mkMod('links',{title:'Contato',items:'Instagram | @cafeaurora\nWhatsApp | wa.me/5511988887777'})
+      mkMod('links',{title:'Contato',links:[mkLink('Instagram','@cafeaurora','i:camera'),mkLink('WhatsApp','wa.me/5511988887777','i:conversa')]})
     ]}
 ];
 
 const MINIS = [
-  {...DEMOS[0], id:'mini1', mods:[mkMod('links',{title:'',items:'Instagram | @saboroiental\nFalar no WhatsApp | wa.me/5511999999999\nConhecer a loja | saboroiental.com.br'})], theme:{...DEMOS[0].theme,bg:'solido',spacing:'compacto'}},
+  {...DEMOS[0], id:'mini1', mods:[mkMod('links',{title:'',links:[mkLink('Instagram','@saboroiental','i:camera'),mkLink('Falar no WhatsApp','wa.me/5511999999999','i:conversa'),mkLink('Conhecer a loja','saboroiental.com.br')]})], theme:{...DEMOS[0].theme,bg:'solido',spacing:'compacto'}},
   {...DEMOS[0], id:'mini2', mods:[mkMod('cardapio',{title:'',sections:[mkSec('Sushis',[['Uramaki de salmão','8 peças com cream cheese','34',{tag:'mais'}],['Niguiri de camarão','2 peças','18']]),mkSec('Bebidas',[['Sucos e refrigerantes','Natural ou lata','9']])]})], theme:{...DEMOS[0].theme,bg:'solido',spacing:'compacto'}},
   {...DEMOS[1], id:'mini3', mods:[mkMod('agendamento',{title:'',services:'Mesa para 2',times:'09:00, 11:00, 15:00',closed:'seg'})], theme:{...DEMOS[1].theme,bg:'solido',spacing:'compacto'}},
   {...DEMOS[0], id:'eddemo', mods:DEMOS[0].mods.slice(0,2)}
@@ -857,7 +910,7 @@ function renderMod(m,p,ctx){
         ${d.cta?`<a class="pb ${m.v===4?'':'inl'}" href="${esc(lnk(d.link))}" target="_blank" rel="noopener" data-click>${esc(d.cta)} <span>↗</span></a>`:''}</div>`;
       break; }
     case 'links':
-      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="lk">${rows(d.items).map(([n,u])=>`<a class="pb lkb" href="${esc(safeUrl(u))}" target="_blank" rel="noopener" data-click>${esc(n)}<span>↗</span></a>`).join('')}</div>`;
+      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="lk">${linkItems(d).filter(l=>l.name||l.url).map(l=>`<a class="pb lkb ${l.icon?'has-ic':''}" href="${esc(safeUrl(l.url))}" target="_blank" rel="noopener" data-click>${iconHtml(l.icon)}<span class="lk-t">${esc(l.name||l.url)}</span><span class="lk-go">↗</span></a>`).join('')}</div>`;
       break;
     case 'cardapio': {
       const secs=menuSecs(d), cart=S.cart[key]||{}, all=secs.flatMap(sc=>sc.items);
@@ -1190,6 +1243,22 @@ function fieldHtml(m,k,lab,type){
   if(type==='area') return `<div class="field"><label for="${fid}">${lab}</label><textarea id="${fid}" data-f="mod:${m.id}:${k}">${esc(v)}</textarea></div>`;
   if(type==='color') return `<label class="colors"><span style="display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600"><input type="color" value="${esc(v||'#7C8CF8')}" data-f="mod:${m.id}:${k}"> ${lab}</span></label>`;
   if(type==='img') return `<div class="field"><label>${lab}</label><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><label class="upl">Enviar foto<input type="file" accept="image/*" data-up="img:${m.id}:${k}"></label>${v?`<button class="btn btn-g btn-s" data-act="rmimg" data-id="${m.id}" data-f="${k}">Remover foto</button>`:''}</div></div>`;
+  if(type==='links'){
+    const L=linkItems(m.data), mid=m.id;
+    return `<div class="field"><label>${lab}</label><div class="led">${L.map((l,i)=>{ const open=S.icOpen===l.id;
+      return `<div class="lit-ed">
+        <div class="lit-top"><button type="button" class="ic-sq ${l.icon?'set':''}" data-act="icopen" data-id="${mid}" data-i="${l.id}" aria-label="${l.icon?'Trocar ícone':'Escolher ícone'}" title="${l.icon?'Trocar ícone':'Escolher ícone'}">${l.icon?(l.icon.startsWith('i:')?iconSvg(l.icon.slice(2)):`<span class="lk-img" style="background-image:url('${esc(l.icon)}')"></span>`):'<span class="ic-plus">+</span>'}</button>
+          <input type="text" value="${esc(l.name)}" placeholder="Nome do link (ex.: Instagram)" data-f="lnk:${mid}:${l.id}:name" aria-label="Nome do link">
+          <button class="ib" data-act="lnkmv" data-id="${mid}" data-i="${l.id}" data-d="-1" aria-label="Subir link" ${i===0?'disabled':''}>↑</button><button class="ib" data-act="lnkmv" data-id="${mid}" data-i="${l.id}" data-d="1" aria-label="Descer link" ${i===L.length-1?'disabled':''}>↓</button><button class="ib" data-act="lnkrm" data-id="${mid}" data-i="${l.id}" aria-label="Excluir link">✕</button></div>
+        <input type="text" class="lit-url" value="${esc(l.url)}" placeholder="Endereço (ex.: instagram.com/seunegocio)" data-f="lnk:${mid}:${l.id}:url" aria-label="Endereço do link">
+        ${open?`<div class="icpick"><div class="icpick-hd"><b>Ícone do link</b><span class="hint">Opcional. Sem ícone, o botão fica só com o texto.</span></div>
+          <div class="icgrid"><button type="button" class="icopt none ${!l.icon?'on':''}" data-act="icset" data-id="${mid}" data-i="${l.id}" data-v="">Sem ícone</button>
+          ${Object.entries(LINK_ICONS).map(([k,[nm]])=>`<button type="button" class="icopt ${l.icon==='i:'+k?'on':''}" data-act="icset" data-id="${mid}" data-i="${l.id}" data-v="i:${k}" title="${nm}" aria-label="${nm}">${iconSvg(k)}</button>`).join('')}</div>
+          <label class="upl">Usar imagem própria<input type="file" accept="image/*" data-up="lnk:${mid}:${l.id}"></label></div>`:''}
+      </div>`; }).join('')}
+      <button type="button" class="addline" data-act="lnkadd" data-id="${mid}">+ Adicionar link</button></div>
+      <span class="hint">Toque no quadrado ao lado do nome para colocar um ícone.</span></div>`;
+  }
   if(type==='menu'){
     const secs=menuSecs(m.data), mid=m.id;
     return `<div class="med">${secs.map((sc,si)=>`<div class="msec-ed">
@@ -1470,6 +1539,11 @@ document.addEventListener('click', async e=>{
     case 'publish': p.published=!p.published; save(); await flush(); render(); toast(p.published?'Página publicada':'Página voltou para rascunho'); break;
     case 'copy': { const inp=$('#share-url'); try{ await navigator.clipboard.writeText(inp.value); toast('Link copiado'); }catch(err){ inp.select(); toast('Selecione e copie o link'); } break; }
     case 'rmimg': { const m=p.mods.find(x=>x.id===id); m.data[a.dataset.f]=''; commit(true); break; }
+    case 'icopen': S.icOpen = S.icOpen===a.dataset.i ? null : a.dataset.i; refreshSide(); break;
+    case 'icset': { const m=p.mods.find(x=>x.id===id); const l=linkItems(m.data).find(x=>x.id===a.dataset.i); l.icon=v||''; S.icOpen=null; commit(true); break; }
+    case 'lnkadd': { const m=p.mods.find(x=>x.id===id); const l=mkLink(); linkItems(m.data).push(l); commit(true); focusLater(`[data-f="lnk:${id}:${l.id}:name"]`); break; }
+    case 'lnkrm': { const m=p.mods.find(x=>x.id===id); m.data.links=linkItems(m.data).filter(x=>x.id!==a.dataset.i); commit(true); toast('Link excluído'); break; }
+    case 'lnkmv': { const m=p.mods.find(x=>x.id===id); const L=linkItems(m.data); const i=L.findIndex(x=>x.id===a.dataset.i), j=i+ +a.dataset.d; if(j<0||j>=L.length) break; [L[i],L[j]]=[L[j],L[i]]; commit(true); break; }
     case 'secadd': { const m=p.mods.find(x=>x.id===id); const sc=mkSec('Nova categoria',[['','','']]); menuSecs(m.data).push(sc); commit(true); focusLater(`[data-f="cat:${id}:${sc.id}:title"]`,true); break; }
     case 'secrm': { const m=p.mods.find(x=>x.id===id); const secs=menuSecs(m.data); const sc=secs.find(x=>x.id===a.dataset.s); if(sc.items.length){ S.modal=confirmModal(`Excluir a categoria "${esc(sc.title||'sem nome')}" e seus ${sc.items.length} itens?`,'secrmok',id+'|'+sc.id); $('#modal-root').innerHTML=S.modal; } else { m.data.sections=secs.filter(x=>x.id!==sc.id); commit(true); } break; }
     case 'secrmok': { const [mid,sid]=id.split('|'); const m=p.mods.find(x=>x.id===mid); m.data.sections=m.data.sections.filter(x=>x.id!==sid); S.modal=null; $('#modal-root').innerHTML=''; commit(true); toast('Categoria excluída'); break; }
@@ -1501,6 +1575,7 @@ document.addEventListener('input', e=>{
   const p=curPage(); if(!p) return;
   const [scope,a,b]=el.dataset.f.split(':');
   if(scope==='theme'){ p.theme[a]= (a==='radius'||a==='bgInt') ? +el.value : el.value; if(a==='radius'&&$('#rv')) $('#rv').textContent=el.value+'px'; if(a==='bgInt'&&$('#iv')) $('#iv').textContent=el.value+'%'; if(['bg','surface','text','accent'].includes(a)) p.theme.look=''; }
+  else if(scope==='lnk'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const l=linkItems(m.data).find(x=>x.id===parts[2]); l[parts[3]]=el.value; }
   else if(scope==='cat'||scope==='itm'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const sc=menuSecs(m.data).find(x=>x.id===parts[2]);
     if(scope==='cat') sc.title=el.value; else { const it=sc.items.find(x=>x.id===parts[3]); it[parts[4]]=el.value; if(parts[4]==='name'){ const t=el.closest('.mit-ed')?.querySelector('.iph-t'); if(t&&!it.photo) t.style.backgroundImage=`url('${illUrl(illFor(it.name,'prato'))}')`; } } }
   else if(scope==='mod'){ const m=p.mods.find(x=>x.id===a); if(b==='@accent') m.accent=el.value; else m.data[b]=el.value; }
@@ -1605,7 +1680,8 @@ function handleUpload(inp){
       if(!error) urls.push(sb.storage.from('media').getPublicUrl(path).data.publicUrl);
     }
     if(!urls.length){ toast('Não foi possível enviar a foto. Use JPG ou PNG de até 3 MB.'); return; }
-    if(kind==='mitem'){ const it=menuSecs(m.data).find(x=>x.id===key).items.find(x=>x.id===key2); it.photo=urls[0]; }
+    if(kind==='lnk'){ const l=linkItems(m.data).find(x=>x.id===key); l.icon=urls[0]; S.icOpen=null; }
+    else if(kind==='mitem'){ const it=menuSecs(m.data).find(x=>x.id===key).items.find(x=>x.id===key2); it.photo=urls[0]; }
     else if(kind==='item'){ m.data.photos={...(m.data.photos||{}),[key]:urls[0]}; }
     else if(kind==='img') m.data[key]=urls[0]; else m.data[key]=[...(m.data[key]||[]),...urls];
     save(); refreshPreview(); refreshSide(); toast(urls.length>1?`${urls.length} fotos adicionadas`:'Foto adicionada');
