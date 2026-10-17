@@ -79,6 +79,71 @@ p{margin:0}
   .ed-main{padding:0}.devices .seg{display:none}
 }
 @media (min-width:1400px){.wrap{max-width:1240px}}
+/* ---------- celular: nada estoura a largura, alvos de toque maiores ---------- */
+.hero>*,.grid3>*,.mods>*,.split>*,.idgrid>*,.adm-grid>*,.auth>*,.co>*,.plans>*,.steps>*,.resell>*,.ed>*,.ed-main,.ed-side,.devices,.pages>*{min-width:0}
+#toast{left:16px;right:16px;margin-inline:auto;width:fit-content;transform:none;text-align:center}
+.ph-prev{max-width:100%}
+.ft nav a{padding-block:6px}
+@media (pointer:coarse),(max-width:900px){
+  html .ib{width:40px;height:40px}
+  html .qty button{width:36px;height:36px;font-size:18px}
+  html .mcats button{padding:.65em 1.05em;min-height:40px}
+  html .seg button,html .wk button{min-height:40px}
+  html .chips button{min-height:40px}
+  html .days button{min-width:62px;padding:10px 6px}
+  html .times button{padding:10px 14px;min-height:40px}
+  html .icopt{height:44px}
+  html .toggle input{width:48px;height:28px}
+  html .toggle input::after{width:22px;height:22px}
+  html .toggle input:checked::after{left:23px}
+  html .lk-copy{padding:10px 0}
+}
+@media (max-width:600px){
+  input,select,textarea{font-size:16px!important}
+  .nav .wrap{gap:10px}
+  .nav .pill{display:none}
+  .logo{font-size:20px}
+  .logo b{font-size:.6em}
+  .ed-top .wrap{padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}
+  .ed-top .crumb #ed-name{max-width:30vw}
+  .ed-top .sync{display:none}
+  .ed-main{padding:0!important}
+  .ph-prev,.ph-prev.desk{width:100%!important;border:0!important;border-radius:0!important;box-shadow:none!important;height:auto!important;min-height:0!important}
+  .ed-side{padding-bottom:90px}
+  html .mrow .mh{flex-wrap:wrap;row-gap:8px}
+  html .mrow .mh b{flex:1 1 calc(100% - 40px)}
+  html .mrow .mh .ib:first-of-type{margin-left:auto}
+  html .mit-top,html .lit-top,html .msec-hd{flex-wrap:wrap;row-gap:8px}
+  html .mit-top input,html .lit-top input{flex:1 1 calc(100% - 52px)}
+  html .msec-hd input{flex:1 1 100%}
+  html .mit-top .ib:first-of-type,html .lit-top .ib:first-of-type,html .msec-hd .ib:first-of-type{margin-left:auto}
+  .mrow .mh .ib{width:38px;height:38px}
+  .mit-top .ib,.lit-top .ib,.msec-hd .ib{width:36px;height:36px}
+  .mit-opts .upl{flex:1 1 auto;justify-content:center}
+  .wk{gap:3px}.wk button{min-width:0;font-size:12px;padding-inline:0}
+  input[type=time],input[type=number],select{min-width:0;max-width:100%}
+  .field,.two>*{min-width:0}
+  .modal .box{padding:20px;border-radius:20px}
+  .tpls{grid-template-columns:1fr 1fr}
+  .kpi b{font-size:28px}
+  .acc .acts .btn{flex:1 1 auto}
+  .dash-hd{align-items:stretch}
+  .pcard .acts .btn{flex:1 1 auto}
+  .h2{font-size:clamp(28px,8vw,40px)}
+  .lead{font-size:16px}
+  .cartbar{bottom:max(10px,env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:380px){
+  .nav .wrap{flex-wrap:wrap;height:auto;padding-block:10px;row-gap:8px}
+  .nav .wrap>div{margin-left:0!important}
+}
+@media (max-width:360px){
+  .tpls{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  .loc-btns{grid-template-columns:1fr}
+  .pm.v5 .lk,.pm.v5 .mn,.pm.v5 .sv,.mn-grade{grid-template-columns:1fr!important}
+}
+
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:600;border:1.5px solid transparent;cursor:pointer;text-decoration:none;font-size:15px;line-height:1.2;white-space:nowrap;transition:transform .15s ease,background .15s}
 .btn:hover{transform:translateY(-1px)}
@@ -523,7 +588,7 @@ input[type=time]{width:100%;padding:10px 12px;border:1.5px solid var(--line);bor
 .msec{display:grid;gap:10px;margin-top:14px}
 .msec-t{font-size:1.02em;text-transform:uppercase;letter-spacing:.08em;padding-bottom:.4em;border-bottom:2px solid var(--p-accent)}
 .mn-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:8px}
-.mtag{display:inline-block;font-size:.68em;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:.2em .55em;border-radius:6px;background:var(--p-accent);color:var(--p-on);margin-bottom:.3em}
+.mtag{display:inline-block;font-size:max(11px,.68em);font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:.2em .55em;border-radius:6px;background:var(--p-accent);color:var(--p-on);margin-bottom:.3em}
 .soldout{font-size:.8em;font-weight:800;text-transform:uppercase;letter-spacing:.05em;opacity:.8}
 .mn-i.is-off .ph{filter:grayscale(1);opacity:.6}
 .mn-i.is-off b{text-decoration:line-through}
@@ -537,7 +602,7 @@ input[type=time]{width:100%;padding:10px 12px;border:1.5px solid var(--line);bor
 .days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .days button,.times button{border:1.5px solid color-mix(in srgb,currentColor 22%,transparent);background:transparent;color:inherit;border-radius:calc(var(--p-r)*.6);cursor:pointer;font:inherit}
 .days button{min-width:56px;padding:8px 6px;display:grid;text-align:center;flex:none}
-.days button small{font-size:.7em;font-weight:700;letter-spacing:.06em;opacity:.9}
+.days button small{font-size:max(11px,.7em);font-weight:700;letter-spacing:.06em;opacity:.9}
 .days button b{font-size:1.15em}
 .days button.on,.times button.on{background:var(--p-accent);color:var(--p-on);border-color:var(--p-accent)}
 .times{display:flex;flex-wrap:wrap;gap:8px}
@@ -643,7 +708,7 @@ a.mapbox{display:block;text-decoration:none;color:inherit}
 .vid-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;display:grid;place-items:center;font-size:24px}
 .pm,.ag,.ag>*,.ck,.ck-f{min-width:0}
 .days{max-width:100%}
-.days button small:last-child{font-size:.62em;opacity:.7;text-transform:uppercase}
+.days button small:last-child{font-size:max(11px,.62em);opacity:.7;text-transform:uppercase}
 </style>
 
 </head>
