@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-eFsJEZR8ApalrC6rYd9UfViwgPzC675j23IBcS3Xee8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pU+GMzCLka/fRsuEgMCIEhFI0baXvvFthqcQ+m9fASA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -1493,9 +1493,9 @@ function viewAssinar(){
   if(S.coDone){
     const wl = SUPPORT_WHATSAPP ? `https://wa.me/55${SUPPORT_WHATSAPP.replace(/\D/g,'')}?text=${encodeURIComponent(`Olá! Fiz o pedido do plano ${P.name} no Cardápio NFC com o e-mail ${me()?.email||''}.`)}` : '';
     return hdr()+`<main class="wrap" style="padding-block:64px;max-width:640px"><div class="card" style="text-align:center;padding:36px">
-      <div class="pill" style="margin:0 auto">Pedido recebido</div><h1 class="h2" style="margin:16px 0 10px">Falta só o pagamento</h1>
-      <p class="muted">Plano ${P.name}. ${S.coLink?'Conclua o pagamento na página que abriu.':'Vamos te enviar as instruções de pagamento.'} Assim que o pagamento for confirmado, seu acesso é liberado e aparece no seu painel.</p>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">${S.coLink?`<a class="btn btn-p" href="${esc(S.coLink)}" target="_blank" rel="noopener">Abrir pagamento</a>`:''}${wl?`<a class="btn btn-g" href="${esc(wl)}" target="_blank" rel="noopener">Enviar comprovante no WhatsApp</a>`:''}<a class="btn btn-g" href="#painel">Ir para o painel</a></div></div></main>`+ftr();
+      <div class="pill" style="margin:0 auto">Cobrança criada</div><h1 class="h2" style="margin:16px 0 10px">Falta só o pagamento</h1>
+      <p class="muted">Plano ${P.name}. Abrindo a página segura de pagamento do Asaas… Assim que o pagamento for aprovado, seu acesso é liberado automaticamente no seu painel.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">${S.coLink?`<a class="btn btn-p" href="${esc(S.coLink)}">Ir para o pagamento</a>`:''}${wl?`<a class="btn btn-g" href="${esc(wl)}" target="_blank" rel="noopener">Enviar comprovante no WhatsApp</a>`:''}<a class="btn btn-g" href="#painel">Ir para o painel</a></div></div></main>`+ftr();
   }
   const valor = c.plan==='mensal' ? `${brl(P.month)} por mês` : c.mode==='vista' ? `${brl(total(c.plan))} à vista` : `${P.months}x de ${brl(P.month)}`;
   const link = (PAYMENT_LINKS[c.plan]||{})[c.mode];
@@ -1509,7 +1509,9 @@ function viewAssinar(){
       <button class="ropt ${c.method==='cartao'?'on':''}" data-act="co" data-f="method" data-v="cartao"><span class="dot"></span><span class="t"><b>Cartão de crédito</b><small>${c.plan==='mensal'?'Cobrança automática todo mês':'À vista ou parcelado'}</small></span></button>
       ${c.mode==='vista'?`<button class="ropt ${c.method==='pix'?'on':''}" data-act="co" data-f="method" data-v="pix"><span class="dot"></span><span class="t"><b>Pix</b><small>${c.plan==='mensal'?'Você recebe a cobrança todo mês':'Aprovação na hora'}</small></span></button>`:''}
     </div></section>
-    ${u?'':`<section><h2>${c.plan!=='mensal'?'4':'3'}. Crie sua conta</h2><div class="form card">
+    <section><h2>${c.plan!=='mensal'?'4':'3'}. Dados de quem paga</h2><div class="form card">
+      <div class="field"><label for="co-cpf">CPF ou CNPJ</label><input type="text" id="co-cpf" inputmode="numeric" autocomplete="off" maxlength="18" placeholder="000.000.000-00"><span class="hint">Obrigatório para emitir a cobrança. Usamos só para o pagamento.</span></div></div></section>
+    ${u?'':`<section><h2>${c.plan!=='mensal'?'5':'4'}. Crie sua conta</h2><div class="form card">
       <div class="field"><label for="co-nome">Nome</label><input type="text" id="co-nome" autocomplete="name"></div>
       <div class="field"><label for="co-email">E-mail</label><input type="email" id="co-email" autocomplete="email"></div>
       <div class="field"><label for="co-senha">Senha</label><input type="password" id="co-senha" minlength="8" maxlength="72" autocomplete="new-password"></div>
@@ -1534,7 +1536,9 @@ function viewPainel(){
   const top = `<header class="nav"><div class="wrap">${logo()}<div style="margin-left:auto;display:flex;gap:10px;align-items:center"><span style="font-weight:600" class="hide-xs">${esc(u.name)}</span><a class="btn btn-g btn-s" href="#inicio">Site</a><button class="btn btn-g btn-s" data-act="logout">Sair</button></div></div></header>`;
   const free = !act;
   const banner = free ? `<div class="freebar"><div><b>${pages.length?'Você está no plano grátis':'Sua primeira página é grátis'}</b><span>${pages.length?'O plano grátis inclui 1 página. Para criar mais páginas, assine um plano.':(freeAvailable()?'Crie e publique 1 página sem pagar nada. Para criar mais, é só assinar.':'A página grátis desta conta ou conexão já foi usada. Assine para criar suas páginas.')}</span></div><button class="btn btn-p btn-s" data-act="paywall">Ver planos</button></div>` : '';
-  const pend = db.pending.length ? `<div class="freebar"><div><b>Pedido de assinatura em análise</b><span>Plano ${esc((PLANS[db.pending[0].plan]||{}).name||'')}. Seu acesso é liberado assim que o pagamento for confirmado.</span></div></div>` : '';
+  const pr = db.pending[0];
+  const pend = pr ? `<div class="freebar"><div><b>Aguardando pagamento</b><span>Plano ${esc((PLANS[pr.plan]||{}).name||'')}. Assim que o pagamento for aprovado, o acesso é liberado sozinho nesta tela.</span></div>${pr.invoice_url?`<a class="btn btn-p btn-s" href="${esc(pr.invoice_url)}">Pagar agora</a>`:''}</div>` : '';
+  if(pr && !act) watchPayment();
   return top+`<main class="wrap"><div class="dash-hd"><div><div class="eyebrow">Painel</div><h1 class="disp">Suas páginas</h1></div><button class="btn btn-p" data-act="new">+ Nova página</button></div>${pend}${banner}${u.role==='revendedor'?`<div class="freebar"><div><b>Você é revendedor</b><span>Cadastre seus clientes, libere prazos e personalize a marca no rodapé das páginas.</span></div><a class="btn btn-p btn-s" href="#revenda">Abrir painel do revendedor</a></div>`:''}${u.is_admin?`<div class="freebar"><div><b>Você é o administrador</b><span>Gerencie contas, prazos e pedidos de assinatura.</span></div><a class="btn btn-p btn-s" href="#admin">Abrir painel do administrador</a></div>`:''}
     <div class="pages">${pages.map(p=>`<article class="pcard"><div class="th"><div class="scaler">${renderPage(p,'thumb')}</div></div>
       <div class="bd"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h3 class="disp">${esc(p.name)}</h3><span class="pill ${p.published?'ok':'draft'}">${p.published?'Publicada':'Rascunho'}</span></div>
@@ -1792,7 +1796,7 @@ function viewAdmin(){
     </div>
     ${reqs.length?`<section class="card reqs"><h2 class="disp" style="font-size:22px">Pedidos de assinatura <span class="pill">${reqs.length}</span></h2><p class="muted" style="margin:4px 0 12px">Aprove depois de confirmar o pagamento. O prazo do plano é somado ao acesso do cliente.</p>
       ${reqs.map(r=>{ const c=byId[r.user_id]; const P=PLANS[r.plan]; const val = r.plan==='mensal'?brl(P.month): r.mode==='vista'?brl(total(r.plan))+' à vista':`${P.months}x ${brl(P.month)}`;
-        return `<div class="req"><div style="min-width:0"><b>${esc(c?.name||'Conta removida')}</b><span class="acc-mail">${esc(c?.email||'')}</span><span class="req-d">Plano ${P.name} · ${val} · ${r.method==='pix'?'Pix':'Cartão'} · ${fmtDT(r.created_at)}</span></div>
+        return `<div class="req"><div style="min-width:0"><b>${esc(c?.name||'Conta removida')}</b><span class="acc-mail">${esc(c?.email||'')}</span><span class="req-d">Plano ${P.name} · ${val} · ${r.method==='pix'?'Pix':'Cartão'} · ${fmtDT(r.created_at)}${r.gateway==='asaas'?' · aguardando o Asaas (libera sozinho ao pagar)':''}</span></div>
           <div class="acts"><button class="btn btn-p btn-s" data-act="admreq" data-id="${r.id}" data-v="aprovado">Aprovar</button><button class="btn btn-g btn-s" data-act="admreq" data-id="${r.id}" data-v="recusado">Recusar</button></div></div>`; }).join('')}</section>`:''}
     <div class="adm-grid">
       <section class="adm-side"><section class="card adm-new"><h2 class="disp" style="font-size:22px;margin-bottom:14px">${RV?'Cadastrar cliente':'Cadastrar conta'}</h2>
@@ -2110,12 +2114,23 @@ async function createPage(k){
   closeModal(); if(!page) return;
   db.pages.push(page); S.edTab='conteudo'; S.openMod=page.mods[0].id; location.hash='editar-'+page.id;
 }
+let payWatch=null;
+function watchPayment(){
+  if(payWatch) return; let n=0;
+  payWatch=setInterval(async()=>{
+    n++; if(n>90 || !db.session){ clearInterval(payWatch); payWatch=null; return; }
+    try{ await loadSession(); }catch(e){ return; }
+    const u=me();
+    if(u && active(u)){ clearInterval(payWatch); payWatch=null; toast('Pagamento aprovado! Seu acesso foi liberado.'); if(location.hash==='#painel') render(); }
+    else if(!db.pending.length){ clearInterval(payWatch); payWatch=null; if(location.hash==='#painel') render(); }
+  }, 8000);
+}
 async function doPay(){
   if(S.busy) return;
   const c=S.co; S.coErr='';
-  const n=$('#co-nome')?.value.trim(), em=$('#co-email')?.value.trim().toLowerCase(), pw=$('#co-senha')?.value||'';
+  const n=$('#co-nome')?.value.trim(), em=$('#co-email')?.value.trim().toLowerCase(), pw=$('#co-senha')?.value||'', cpf=($('#co-cpf')?.value||'').trim();
   S.busy=true; rerenderKeep();
-  const refill=()=>{ if($('#co-nome')){ $('#co-nome').value=n||''; $('#co-email').value=em||''; $('#co-senha').value=pw; } };
+  const refill=()=>{ if($('#co-nome')){ $('#co-nome').value=n||''; $('#co-email').value=em||''; $('#co-senha').value=pw; } if($('#co-cpf')) $('#co-cpf').value=cpf; };
   refill();
   try{
     if(!me()){
@@ -2124,13 +2139,14 @@ async function doPay(){
       const { error } = await sb.auth.signInWithPassword({ email:em, password:pw }); if(error) throw new Error('Conta criada, mas não foi possível entrar. Entre pela tela de login.');
       await loadSession();
     }
+    const digits = cpf.replace(/\D/g,'');
+    if(digits.length!==11 && digits.length!==14) throw new Error('Informe um CPF (11 números) ou CNPJ (14 números) válido.');
     const mode = c.plan==='mensal'?'vista':c.mode;
-    const { error } = await sb.from('payment_requests').insert({ plan:c.plan, mode, method:mode==='parcelado'?'cartao':c.method });
-    if(error) throw new Error('Não foi possível registrar o pedido. Tente de novo.');
-    await loadSession();
-    S.coLink = (PAYMENT_LINKS[c.plan]||{})[mode] || '';
-    if(S.coLink) window.open(S.coLink,'_blank','noopener');
-    S.busy=false; S.coDone=true; render(); window.scrollTo(0,0);
+    const r = await api('checkout',{ plan:c.plan, mode, method:mode==='parcelado'?'cartao':c.method, cpf:digits });
+    try{ await loadSession(); }catch(e){}
+    S.coLink = r.url; S.busy=false; S.coDone=true; render(); window.scrollTo(0,0);
+    try{ sessionStorage.setItem('cnfc-pay','1'); }catch(e){}
+    setTimeout(()=>{ location.href = r.url; }, 900);
   }catch(err){ S.busy=false; S.coErr=err.message; rerenderKeep(); refill(); }
 }
 const MAXW=1100;
