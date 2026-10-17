@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pU+GMzCLka/fRsuEgMCIEhFI0baXvvFthqcQ+m9fASA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TNttKsndRfvTKO9gXTk3uLIZw2znSQKmDfkMx6Yb3mY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -693,6 +693,22 @@ a.mapbox{display:block;text-decoration:none;color:inherit}
 .mapbox::after{display:none}
 .addr{margin:0}
 .loc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.loc-btns.one{grid-template-columns:1fr}
+.loc-btns .pb{white-space:nowrap}
+.pg.has-waf .pg-in{padding-bottom:84px}
+.wa-head{display:flex;align-items:center;gap:12px}
+.wa-head h2{margin:0}
+.wa-ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--p-accent);color:var(--p-on)}
+.wa-ic svg{width:26px;height:26px}
+.wa-txt{margin:.7em 0 0;opacity:.9}
+.wa-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:14px 0 10px}
+.wa-topics a{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;border:1.5px solid color-mix(in srgb,var(--p-accent) 45%,transparent);color:inherit;text-decoration:none;font-weight:600;font-size:.95em;background:color-mix(in srgb,var(--p-accent) 7%,transparent)}
+.wa-topics a span{color:var(--p-accent)}
+.wa-topics a:hover{background:color-mix(in srgb,var(--p-accent) 15%,transparent)}
+.wa-main{width:100%;justify-content:center;margin-top:4px}
+.wa-float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:50;display:flex;align-items:center;gap:8px;padding:12px 16px 12px 12px;border-radius:999px;background:#1FA855;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.wa-float svg{width:24px;height:24px}
+.pg[data-ctx=edit] .wa-float{position:sticky;float:right;margin:-70px 12px 12px auto}
 .loc-btns .pb{justify-content:center;gap:8px}
 .pb-alt{background:transparent!important;color:var(--p-accent)!important}
 .lk-copy{margin-top:8px;background:none;border:0;color:inherit;opacity:.75;font:inherit;font-size:.88em;text-decoration:underline;cursor:pointer;padding:4px 0}
@@ -906,6 +922,7 @@ function sanitizeTheme(t){
   o.radius = Math.min(30, Math.max(0, parseInt(t.radius ?? d.radius) || 0));
   o.bgInt = Math.min(80, Math.max(5, parseInt(t.bgInt ?? d.bgInt) || 30));
   o.bgImage = cleanUrl(t.bgImage);
+  o.waFloat = t.waFloat===true;
   return o;
 }
 function sanitizeMods(mods){
@@ -927,11 +944,12 @@ const MODS = {
   servicos:    {label:'Serviços',     v5:true,  fields:[['title','Título'],['items','Serviços (um por linha): Nome | Descrição | Preço','area'],['photos','Fotos dos serviços','photos']]},
   agendamento: {label:'Agendamento',  v5:false, fields:[['title','Título'],['services','Serviços oferecidos (um por linha)','area'],['agenda','Dias e horários de atendimento','agenda']]},
   horarios:    {label:'Horários',     v5:false, fields:[['title','Título'],['items','Um por linha: Dia | Horário','area']]},
-  localizacao: {label:'Localização',  v5:false, fields:[['title','Título'],['address','Endereço completo (rua, número, bairro, cidade)','area'],['ref','Ponto de referência'],['mapLink','Link do Google Maps (opcional, se o endereço não for encontrado)'],['map','Mapa','maptoggle']]},
+  localizacao: {label:'Localização',  v5:false, fields:[['title','Título'],['address','Endereço completo (rua, número, bairro, cidade)','area'],['ref','Ponto de referência'],['mapLink','Link do Google Maps (opcional · cole o link de compartilhar)'],['wazeLink','Link do Waze (opcional · cole o link de compartilhar)'],['map','Mapa','maptoggle']]},
   galeria:     {label:'Galeria',      v5:true,  fields:[['title','Título'],['images','Fotos','gal']]},
   perguntas:   {label:'Perguntas',    v5:false, fields:[['title','Título'],['items','Uma por linha: Pergunta | Resposta','area']]},
   chamada:     {label:'Chamada',      v5:false, fields:[['title','Título'],['text','Texto','area'],['cta','Texto do botão'],['link','Link do botão (vazio = WhatsApp)']]},
   banner:      {label:'Banner',       v5:false, fields:[['image','Imagem do banner','img'],['title','Título'],['text','Texto','area'],['cta','Texto do botão (opcional)'],['link','Link do botão (vazio = WhatsApp)']]},
+  whatsapp:    {label:'WhatsApp',     v5:false, fields:[['title','Título'],['text','Texto','area'],['who','Nome do responsável (opcional)'],['phone','Número do WhatsApp (deixe vazio para usar o WhatsApp do negócio)','tel'],['topics','Assuntos (um por linha, viram botões)','area'],['cta','Texto do botão principal']]},
   texto:       {label:'Texto',        v5:false, fields:[['title','Título'],['text','Texto','area']]},
   video:       {label:'Vídeo',        v5:false, fields:[['title','Título'],['url','Link do vídeo no YouTube']]}
 };
@@ -947,11 +965,12 @@ function defData(t){
     servicos:{title:'Serviços',items:'Serviço principal | O que está incluso | 120\nServiço extra | Complemento | 60\nProjeto sob medida | Orçamento personalizado | Consultar'},
     agendamento:defAgenda({title:'Agende seu horário',services:'Consulta\nRetorno'}),
     horarios:{title:'Horários',items:'Segunda a sexta | 09h às 18h\nSábado | 09h às 13h\nDomingo | Fechado'},
-    localizacao:{title:'Onde estamos',address:'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',ref:'Em frente à estação do metrô',mapLink:'',map:true},
+    localizacao:{title:'Onde estamos',address:'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',ref:'Em frente à estação do metrô',mapLink:'',wazeLink:'',map:true},
     galeria:{title:'Galeria',images:[],ills:[['mesa','Exemplo'],['banquete','Exemplo'],['interior1','Exemplo'],['buffet','Exemplo']]},
     perguntas:{title:'Perguntas frequentes',items:'Vocês entregam? | Sim, num raio de 5 km.\nQuais formas de pagamento? | Pix, cartão e dinheiro.'},
     chamada:{title:'Vamos conversar?',text:'Tire suas dúvidas e faça seu pedido pelo WhatsApp.',cta:'Chamar no WhatsApp',link:''},
     banner:{image:'',ill:'banquete',title:'Promoção da semana',text:'Combo para 2 pessoas com bebida inclusa.',cta:'Quero aproveitar',link:''},
+    whatsapp:{title:'Fale com a gente',text:'Escolha o assunto e converse direto pelo WhatsApp.',who:'',phone:'',topics:'Fazer um pedido\nMarcar um horário\nAgendar uma consulta\nPedir um orçamento\nTirar uma dúvida',cta:'Conversar no WhatsApp'},
     texto:{title:'Nossa história',text:'Conte aqui um pouco sobre o seu negócio, há quanto tempo existe e o que faz dele especial.'},
     video:{title:'Conheça a gente',url:''}
   })[t];
@@ -998,9 +1017,9 @@ function defAgenda(x={}){ return {days:[false,true,true,true,true,true,true], st
 const mkMod = (type, data={}, extra={}) => ({id:uid(), type, v:1, pad:'n', accent:'', data:{...defData(type), ...data}, ...extra});
 
 const TEMPLATES = {
-  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','horarios','localizacao','links']},
-  servicos:   {name:'Serviços', ill:'cozinha', desc:'Lista de serviços e perguntas',  look:'claro', mods:['capa','servicos','perguntas','chamada','links']},
-  agenda:     {name:'Agendamentos', ill:'interior1',desc:'Salão, clínica, estúdio',       look:'ceu', mods:['capa','agendamento','servicos','horarios','localizacao']},
+  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','horarios','localizacao','whatsapp','links']},
+  servicos:   {name:'Serviços', ill:'cozinha', desc:'Lista de serviços e perguntas',  look:'claro', mods:['capa','servicos','perguntas','whatsapp','links']},
+  agenda:     {name:'Agendamentos', ill:'interior1',desc:'Salão, clínica, estúdio',       look:'ceu', mods:['capa','agendamento','servicos','horarios','localizacao','whatsapp']},
   portfolio:  {name:'Portfólio', ill:'banquete',   desc:'Fotos do seu trabalho',          look:'noite', mods:['capa','galeria','chamada','links']},
   links:      {name:'Página de links', ill:'interior2', desc:'Todos os seus links',        look:'claro', mods:['capa','links']},
   branco:     {name:'Em branco',   desc:'Comece só com a capa',           look:'claro', mods:['capa']}
@@ -1064,9 +1083,9 @@ function renderPage(p, ctx='view'){
   const t=normTheme(p.theme); ensureFont(t.font);
   const bgi = t.bgImage ? `;background:linear-gradient(color-mix(in srgb,${t.bg} 84%,transparent),color-mix(in srgb,${t.bg} 84%,transparent)),url('${esc(t.bgImage)}') center/cover` : '';
   const mods = p.mods.filter(m=>!m.hidden || ctx==='edit');
-  return `<div class="pg surf-${t.surface} bg-${t.bgStyle} ${t.btnFill==='contorno'?'btn-contorno':''}" style="${pageStyle(t)}${bgi}" data-pid="${p.id}" data-ctx="${ctx}">
+  return `<div class="pg ${t.waFloat&&p.whatsapp?'has-waf':''} surf-${t.surface} bg-${t.bgStyle} ${t.btnFill==='contorno'?'btn-contorno':''}" style="${pageStyle(t)}${bgi}" data-pid="${p.id}" data-ctx="${ctx}">
     <div class="pg-in">${mods.map(m=>renderMod(m,p,ctx)).join('')}
-    ${pageFoot(p)}</div></div>`;
+    ${pageFoot(p)}</div>${t.waFloat && p.whatsapp && ctx!=='thumb' && wa(p.whatsapp,'x') ? `<a class="wa-float" href="${esc(wa(p.whatsapp,`Olá! Vim pela página ${p.name}.`))}" target="_blank" rel="noopener" data-click aria-label="Conversar no WhatsApp">${iconSvg('conversa')}<span>WhatsApp</span></a>`:''}</div>`;
 }
 function modOpen(m){ return `<section class="pm ${m.type==='capa'?'cv':''} pm-${m.type} v${m.v||1} pad-${m.pad||'n'} ${m.hidden?'pm-hidden':''}" style="${m.accent?`--p-accent:${esc(m.accent)};--p-on:${onColor(m.accent)}`:''}" data-mid="${m.id}">`; }
 /* ---------- ilustrações de exemplo (desenhadas em SVG, sem depender de sites externos) ---------- */
@@ -1299,16 +1318,29 @@ function renderMod(m,p,ctx){
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="hr">${rows(d.items).map(([a,b])=>`<div class="${(a||'').toLowerCase().startsWith(today.slice(0,3))?'today':''}"><span>${esc(a)}</span><span>${esc(b||'')}</span></div>`).join('')}</div>`;
       break; }
     case 'localizacao': {
-      const q = encodeURIComponent((d.address||'').replace(/\s+/g,' ').trim());
-      const gm = d.mapLink ? safeUrl(d.mapLink) : `https://www.google.com/maps/search/?api=1&query=${q}`;
-      const wz = `https://waze.com/ul?q=${q}&navigate=yes`;
-      const showMap = d.map!==false && d.address;
+      const addr = (d.address||'').replace(/\s+/g,' ').trim(), q = encodeURIComponent(addr);
+      const gm = d.mapLink ? safeUrl(d.mapLink) : (addr ? `https://www.google.com/maps/search/?api=1&query=${q}` : '');
+      const wz = d.wazeLink ? safeUrl(d.wazeLink) : (addr ? `https://waze.com/ul?q=${q}&navigate=yes` : '');
+      const showMap = d.map!==false && addr;
       const map = !showMap ? '' : (IN_SANDBOX || ctx==='thumb')
         ? `<a class="mapbox" href="${esc(gm)}" target="_blank" rel="noopener" aria-label="Abrir mapa"><span class="map-pin"></span><span class="map-cta">Ver no mapa</span></a>`
-        : `<div class="mapframe"><iframe title="Mapa: ${esc(d.address)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${q}&z=16&output=embed"></iframe></div>`;
-      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${map}<p class="addr"><b>${esc(d.address)}</b></p>${d.ref?`<p class="sub">${esc(d.ref)}</p>`:''}
-        <div class="loc-btns"><a class="pb" href="${esc(gm)}" target="_blank" rel="noopener" data-click>Google Maps <span>↗</span></a><a class="pb pb-alt" href="${esc(wz)}" target="_blank" rel="noopener" data-click>Waze <span>↗</span></a></div>
-        <button class="lk-copy" data-act="copyaddr" data-v="${esc(d.address)}">Copiar endereço</button>`;
+        : `<div class="mapframe"><iframe title="Mapa: ${esc(addr)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${q}&z=16&output=embed"></iframe></div>`;
+      const btns = [gm&&`<a class="pb" href="${esc(gm)}" target="_blank" rel="noopener" data-click>Google Maps <span>↗</span></a>`, wz&&`<a class="pb pb-alt" href="${esc(wz)}" target="_blank" rel="noopener" data-click>Waze <span>↗</span></a>`].filter(Boolean);
+      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${map}${addr?`<p class="addr"><b>${esc(addr)}</b></p>`:''}${d.ref?`<p class="sub">${esc(d.ref)}</p>`:''}
+        ${btns.length?`<div class="loc-btns ${btns.length===1?'one':''}">${btns.join('')}</div>`:(ctx==='edit'?'<p class="sub">Informe o endereço ou cole os links do Google Maps e do Waze.</p>':'')}
+        ${addr?`<button class="lk-copy" data-act="copyaddr" data-v="${esc(addr)}">Copiar endereço</button>`:''}`;
+      break; }
+    case 'whatsapp': {
+      const num = String(d.phone||'').replace(/\D/g,'') ? d.phone : p.whatsapp;
+      const who = (d.who||'').trim();
+      const msg = t => `Olá${who?', '+who:''}! Vim pela página ${p.name}${t?' e gostaria de: '+t:'.'}`;
+      const topics = String(d.topics||'').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,12);
+      const link = t => wa(num, msg(t));
+      h = `<div class="wa-box"><div class="wa-head"><span class="wa-ic">${iconSvg('conversa')}</span><div>${d.title?`<h2>${esc(d.title)}</h2>`:''}${who?`<p class="sub">Atendimento com <b>${esc(who)}</b></p>`:''}</div></div>
+        ${d.text?`<p class="wa-txt">${esc(d.text)}</p>`:''}
+        ${!link('')?`<p class="sub">${ctx==='edit'?'Informe o WhatsApp aqui no módulo ou na aba Publicar.':'WhatsApp indisponível no momento.'}</p>`:`
+        ${topics.length?`<div class="wa-topics">${topics.map(t=>`<a href="${esc(link(t))}" target="_blank" rel="noopener" data-click>${esc(t)} <span>↗</span></a>`).join('')}</div>`:''}
+        <a class="pb wa-main" href="${esc(link(''))}" target="_blank" rel="noopener" data-click>${esc(d.cta||'Conversar no WhatsApp')} <span>↗</span></a>`}</div>`;
       break; }
     case 'galeria': {
       const imgs = (d.images&&d.images.length) ? d.images.map(s=>`<div style="background-image:url('${s}')"></div>`) :
@@ -1612,7 +1644,8 @@ function edSide(p){
     h += `<div class="eyebrow">Publicar</div><div class="ed-h">Pronta para circular.</div><div class="form">
       <div class="field"><label for="pg-name">Nome da página</label><input type="text" id="pg-name" value="${esc(p.name)}" data-f="page:name"></div>
       <div class="field"><label for="pg-slug">Endereço</label><input type="text" id="pg-slug" value="${esc(p.slug)}" data-f="page:slug"><span class="hint" id="slug-hint">Só letras, números e hífen.</span></div>
-      <div class="field"><label for="pg-wa">WhatsApp do negócio</label><input type="tel" id="pg-wa" value="${esc(p.whatsapp||'')}" placeholder="11 99999-9999" data-f="page:whatsapp"><span class="hint">Recebe pedidos do cardápio e pedidos de agendamento.</span></div>
+      <div class="field"><label for="pg-wa">WhatsApp do negócio</label><input type="tel" id="pg-wa" value="${esc(p.whatsapp||'')}" placeholder="11 99999-9999" data-f="page:whatsapp"><span class="hint">Usado em tudo: pedidos do cardápio, agendamentos, consultas, orçamentos e dúvidas. Módulos podem ter outro número.</span></div>
+      <label class="toggle"><input type="checkbox" data-act="wafloat" ${p.theme&&p.theme.waFloat?'checked':''}> Mostrar botão flutuante do WhatsApp na página</label>
       <label class="toggle"><input type="checkbox" data-act="publish" ${p.published?'checked':''}> ${p.published?'Página publicada':'Página em rascunho'}</label>
       <div class="share"><div class="lbl" style="font-size:13px;font-weight:600">Link da página</div>
         <div class="copyrow"><input type="text" id="share-url" readonly value="${esc(url)}" aria-label="Link"><button class="btn btn-g btn-s" data-act="copy">Copiar</button></div>
@@ -1659,6 +1692,7 @@ function fieldHtml(m,k,lab,type){
       <div class="field"><label for="aa-${mid}">Mostrar os próximos</label><select id="aa-${mid}" data-f="mod:${mid}:ahead">${[7,14,21,30,60].map(v=>opt(v,v+' dias',d.ahead)).join('')}</select></div></div>
       <label class="toggle"><input type="checkbox" data-act="mdat" data-id="${mid}" data-f="askName" data-v="!" ${d.askName!==false?'checked':''}> Pedir o nome do cliente</label></div>`;
   }
+  if(type==='tel') return `<div class="field"><label for="f-${m.id}-${k}">${lab}</label><input type="tel" id="f-${m.id}-${k}" value="${esc(m.data[k]||'')}" placeholder="11 99999-9999" data-f="mod:${m.id}:${k}"></div>`;
   if(type==='maptoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="map" data-v="!" ${m.data.map!==false?'checked':''}> Mostrar o mapa na página</label>`;
   if(type==='links'){
     const L=linkItems(m.data), mid=m.id;
@@ -1958,7 +1992,7 @@ document.addEventListener('click', async e=>{
   if(!a) return;
   if(stop && a.dataset.act==='closemodal' && !a.closest('button')) return;
   const act=a.dataset.act, id=a.dataset.id, v=a.dataset.v;
-  if(a.tagName==='INPUT' && a.type==='checkbox' && !['publish','ownc','itoff','mdat','ordt'].includes(act)) return;
+  if(a.tagName==='INPUT' && a.type==='checkbox' && !['publish','ownc','itoff','mdat','ordt','wafloat'].includes(act)) return;
   if(act.startsWith('adm') && admAct(act, id, a)) return;
   const p=curPage();
   switch(act){
@@ -1991,6 +2025,7 @@ document.addEventListener('click', async e=>{
     case 'publish': p.published=!p.published; save(); await flush(); render(); toast(p.published?'Página publicada':'Página voltou para rascunho'); break;
     case 'copy': { const inp=$('#share-url'); try{ await navigator.clipboard.writeText(inp.value); toast('Link copiado'); }catch(err){ inp.select(); toast('Selecione e copie o link'); } break; }
     case 'rmimg': { const m=p.mods.find(x=>x.id===id); m.data[a.dataset.f]=''; commit(true); break; }
+    case 'wafloat': { p.theme.waFloat=!p.theme.waFloat; commit(true); break; }
     case 'mdat': { const m=p.mods.find(x=>x.id===id); const f=a.dataset.f; if(v==='!'){ const defOn=['nav','map','askName'].includes(f); const cur = m.data[f]===undefined ? defOn : m.data[f]!==false && !!m.data[f]; m.data[f]=!cur; } else m.data[f]=v; commit(true); break; }
     case 'ordt': { const m=p.mods.find(x=>x.id===id); const o=m.data.order=m.data.order||defOrder(); const f=a.dataset.f; if(f.startsWith('pay.')){ o.pay=o.pay||{}; o.pay[f.slice(4)]=!o.pay[f.slice(4)]; } else if(f==='askName') o.askName = o.askName===false; else o[f]=!o[f]; commit(true); break; }
     case 'agday': { const m=p.mods.find(x=>x.id===id); m.data.days[+a.dataset.i]=!m.data.days[+a.dataset.i]; commit(true); break; }
