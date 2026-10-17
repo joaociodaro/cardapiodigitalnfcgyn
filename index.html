@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mZZzKXxRaGwCv+tObD2F3aGug5O8/O31rahNaC+2hGk='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-uYYC47orFrMWwIrwAANlfTSUVFg4W7gR4vEEwkpCGkM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -544,6 +544,35 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .tgl-row .toggle{font-size:14px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wkt{display:grid;gap:6px;margin-bottom:10px}
+.wkt-r{display:grid;grid-template-columns:96px minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:6px}
+.wkt-r input[type=time]{min-width:0;width:100%;padding:8px 6px;font-size:15px}
+.wkt-r span{font-size:13px;color:var(--muted)}
+.wkt-r em{grid-column:2/5;font-style:normal;color:var(--muted);font-size:14px}
+.wkt-d{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;cursor:pointer}
+.wkt-r.off .wkt-d{color:var(--muted)}
+.ecal{border:1.5px solid var(--line);border-radius:14px;padding:12px;background:var(--card);--p-r:14px;--p-accent:var(--accent);--p-on:#fff}
+.ecal .cal-g button{border-color:var(--line);background:var(--card);color:var(--ink)}
+.ecal .cal-g button.st-aberto{border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:var(--soft);color:var(--accent)}
+.ecal .cal-g button.st-fech,.ecal .cal-g button.st-fech0{background:#F3F4F6;color:#9AA3B2}
+.ecal .cal-g button.st-fech{background:#FDECEC;color:#C0392B;border-color:#F5B7B1}
+.ecal .cal-g button.st-esp{background:#FFF6DA;color:#8A6100;border-color:#F2D27A}
+.ecal .cal-g button.st-blq{background:var(--soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:inset 0 -4px 0 #F2A93B}
+.ecal .cal-g button.sel{outline:3px solid var(--accent);outline-offset:1px}
+.ecal .cal-lg{color:var(--muted)}
+.ecal .cal-lg i.fe{background:#FDECEC;border-color:#F5B7B1}.ecal .cal-lg i.es{background:#FFF6DA;border-color:#F2D27A}.ecal .cal-lg i.bq{background:var(--soft);box-shadow:inset 0 -3px 0 #F2A93B}
+.ecal-day{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}
+.ecal-day>b::first-letter{text-transform:uppercase}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg3 button{padding:9px 6px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer}
+.seg3 button.on{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+.slt{display:flex;flex-wrap:wrap;gap:6px}
+.slt button{padding:7px 11px;border-radius:9px;border:1.5px solid color-mix(in srgb,var(--accent) 45%,transparent);background:var(--soft);color:var(--accent);font:inherit;font-weight:700;font-size:13px;cursor:pointer;font-variant-numeric:tabular-nums}
+.slt button.off{background:#F3F4F6;color:#9AA3B2;border-color:var(--line);text-decoration:line-through}
+.exl{display:grid;gap:6px}
+.exl>div{display:flex;align-items:center;gap:10px;font-size:14px}
+.exl>div span{flex:1;color:var(--muted)}
+.exl-d{border:0;background:none;font:inherit;font-weight:700;color:var(--accent);cursor:pointer;padding:0}
 .wk button{padding:8px 0;border-radius:8px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:13px;cursor:pointer;color:var(--muted)}
 .wk button.on{border-color:var(--accent);background:var(--soft);color:var(--accent)}
 .mit-optta{min-height:64px!important;font-size:14px!important}
@@ -608,6 +637,21 @@ input[type=time]{width:100%;padding:10px 12px;border:1.5px solid var(--line);bor
 .times{display:flex;flex-wrap:wrap;gap:8px}
 .times button{padding:7px 12px;font-size:.92em}
 .ag{display:grid;gap:14px}
+.cal{max-width:380px}
+.cal-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.cal-hd b{font-size:1.02em}
+.cal-hd button{width:36px;height:36px;border-radius:50%;border:1.5px solid color-mix(in srgb,currentColor 22%,transparent);background:transparent;color:inherit;font-size:1.2em;line-height:1;cursor:pointer}
+.cal-hd button:disabled{opacity:.3;cursor:default}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-w{font-size:max(11px,.72em);font-weight:800;opacity:.7;padding:4px 0}
+.cal-g button,.cal-g .cal-x{aspect-ratio:1;display:grid;place-items:center;border-radius:calc(var(--p-r)*.5);font:inherit;font-weight:700;font-variant-numeric:tabular-nums}
+.cal-g button{border:1.5px solid color-mix(in srgb,var(--p-accent) 45%,transparent);background:color-mix(in srgb,var(--p-accent) 8%,transparent);color:inherit;cursor:pointer}
+.cal-g button.on{background:var(--p-accent);color:var(--p-on);border-color:var(--p-accent)}
+.cal-g .cal-x{opacity:.32;text-decoration:line-through}
+.cal-lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:max(12px,.78em);opacity:.85}
+.cal-lg span{display:flex;align-items:center;gap:5px}
+.cal-lg i{width:12px;height:12px;border-radius:4px;border:1.5px solid color-mix(in srgb,currentColor 30%,transparent)}
+.cal-lg i.ok{border-color:var(--p-accent);background:color-mix(in srgb,var(--p-accent) 18%,transparent)}
 .ag-sv{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
 .ag-sv button{display:flex;align-items:center;gap:12px;text-align:left;padding:10px;border-radius:calc(var(--p-r)*.6);border:1.5px solid color-mix(in srgb,currentColor 18%,transparent);background:transparent;color:inherit;font:inherit;cursor:pointer}
 .ag-sv button.on{border-color:var(--p-accent);background:color-mix(in srgb,var(--p-accent) 10%,transparent)}
@@ -1036,7 +1080,7 @@ function iconHtml(ic){
   return `<span class="lk-ic lk-img" style="background-image:url('${esc(ic)}')"></span>`;
 }
 function defOrder(){ return {on:true, delivery:true, pickup:true, table:true, fee:'', min:'', pix:'', askName:true, pay:{pix:true, cartao:true, dinheiro:true}}; }
-function defAgenda(x={}){ return {days:[false,true,true,true,true,true,true], start:'09:00', end:'18:00', interval:'60', lunchStart:'12:00', lunchEnd:'13:00', ahead:'14', askName:true, ...x}; }
+function defAgenda(x={}){ const o={days:[false,true,true,true,true,true,true], start:'09:00', end:'18:00', interval:'60', lunchStart:'12:00', lunchEnd:'13:00', ahead:'30', askName:true, exc:{}, ...x}; if(!o.wh) o.wh=[0,1,2,3,4,5,6].map(i=>({start:o.start, end:i===6?'13:00':o.end})); return o; }
 const mkMod = (type, data={}, extra={}) => ({id:uid(), type, v:1, pad:'n', accent:'', data:{...defData(type), ...data}, ...extra});
 
 const TEMPLATES = {
@@ -1194,25 +1238,50 @@ const bgImg = u => { const c = (typeof u==='string' && u.startsWith('data:image/
 
 function itemOpts(it){ return rows(it.opts).map(([n,pr])=>({name:n||'', price:pr||''})).filter(o=>o.name); }
 const isoDay = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
-function agDays(d){
-  const days=[]; const base=new Date(); base.setHours(12,0,0,0);
-  const open = Array.isArray(d.days) ? d.days : [0,1,2,3,4,5,6].map(i=>!String(d.closed||'').toLowerCase().includes(['dom','seg','ter','qua','qui','sex','sáb'][i]));
-  const ahead = Math.min(60, Math.max(1, +d.ahead||14));
-  for(let i=0;i<ahead;i++){ const dt=new Date(base); dt.setDate(base.getDate()+i); if(open[dt.getDay()] && agSlots(d,dt).length) days.push(dt); }
-  return days;
+const agMin = x => { const [hh,mm]=String(x||'').split(':').map(Number); return (hh||0)*60+(mm||0); };
+const agHM = t => String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
+function agWeek(d){ // horário de cada dia da semana (migra a versão antiga, com horário único)
+  if(!Array.isArray(d.wh) || d.wh.length!==7) d.wh = [0,1,2,3,4,5,6].map(()=>({start:d.start||'09:00', end:d.end||'18:00'}));
+  if(!Array.isArray(d.days)) d.days=[false,true,true,true,true,true,true];
+  return d.wh;
+}
+const agExc = d => (d.exc && typeof d.exc==='object' && !Array.isArray(d.exc)) ? d.exc : (d.exc={});
+function agDayInfo(d, date){ // {open, start, end, off[]} para uma data
+  const iso=isoDay(date), e=agExc(d)[iso]||null, dow=date.getDay();
+  if(e && e.mode==='fechado') return {open:false, e};
+  if(!d.start && d.times && !d.wh) return {open:Array.isArray(d.days)?!!d.days[dow]:true, legacy:true, e};
+  const w=agWeek(d)[dow]||{};
+  if(e && e.mode==='especial') return {open:true, start:e.start||w.start||'09:00', end:e.end||w.end||'18:00', off:e.off||[], e};
+  return {open:!!d.days[dow], start:w.start||'09:00', end:w.end||'18:00', off:(e&&e.off)||[], e};
+}
+function agAllSlots(d, date){ // todos os horários do dia (sem tirar bloqueios)
+  const inf=agDayInfo(d,date); if(!inf.open) return [];
+  if(inf.legacy) return String(d.times).split(',').map(x=>x.trim()).filter(Boolean);
+  const st=agMin(inf.start), en=agMin(inf.end), iv=Math.max(10,+d.interval||60);
+  const ls=d.lunchStart?agMin(d.lunchStart):null, le=d.lunchEnd?agMin(d.lunchEnd):null, out=[];
+  for(let t=st; t+iv<=en; t+=iv){ if(ls!==null && le!==null && le>ls && t<le && t+iv>ls) continue; out.push(agHM(t)); }
+  return out;
 }
 function agSlots(d, date){
-  const toMin = x => { const [hh,mm]=String(x||'').split(':').map(Number); return (hh||0)*60+(mm||0); };
-  let out;
-  if(!d.start && d.times) out = String(d.times).split(',').map(x=>x.trim()).filter(Boolean);
-  else {
-    const st=toMin(d.start||'09:00'), en=toMin(d.end||'18:00'), iv=Math.max(10,+d.interval||60);
-    const ls=d.lunchStart?toMin(d.lunchStart):null, le=d.lunchEnd?toMin(d.lunchEnd):null; out=[];
-    for(let t=st; t+iv<=en; t+=iv){ if(ls!==null && le!==null && le>ls && t<le && t+iv>ls) continue; out.push(String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')); }
-  }
+  const inf=agDayInfo(d,date); const off=new Set(inf.off||[]);
+  let out=agAllSlots(d,date).filter(x=>!off.has(x));
   const now=new Date();
-  if(date.toDateString()===now.toDateString()){ const nm=now.getHours()*60+now.getMinutes(); out=out.filter(x=>toMin(x)>nm+30); }
+  if(date.toDateString()===now.toDateString()){ const nm=now.getHours()*60+now.getMinutes(); out=out.filter(x=>agMin(x)>nm+30); }
   return out;
+}
+function agDays(d){
+  const days=[]; const base=new Date(); base.setHours(12,0,0,0);
+  const ahead = Math.min(120, Math.max(1, +d.ahead||14));
+  for(let i=0;i<ahead;i++){ const dt=new Date(base); dt.setDate(base.getDate()+i); if(agSlots(d,dt).length) days.push(dt); }
+  return days;
+}
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function calGrid(year, month){ // semanas do mês (domingo a sábado), null fora do mês
+  const first=new Date(year,month,1,12), n=new Date(year,month+1,0,12).getDate(), cells=[];
+  for(let i=0;i<first.getDay();i++) cells.push(null);
+  for(let dd=1; dd<=n; dd++) cells.push(new Date(year,month,dd,12));
+  while(cells.length%7) cells.push(null);
+  return cells;
 }
 /* ----- pedido: carrinho, entrega/retirada/mesa, pagamento ----- */
 function orderCalc(p, m, key){
@@ -1333,7 +1402,13 @@ function renderMod(m,p,ctx){
       const why = services.length&&!sv?'Escolha o serviço':!dsel?'Escolha o dia':!tOk?'Escolha o horário':!nameOk?'Informe seu nome':!p.whatsapp?'O WhatsApp do negócio não foi configurado':'';
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="ag">
         ${svl.length?`<div><div class="lbl-s">Escolha o serviço</div><div class="ag-sv">${svl.map(it=>`<button class="${it.name===sv?'on':''}" data-act="sched" data-k="${key}" data-f="s" data-v="${esc(it.name)}" aria-pressed="${it.name===sv}"><span class="ag-th" style="${bgImg(it.photo||illUrl(illFor(it.name+' '+(it.desc||''),'servico')))}"></span><span class="ag-tx"><b>${esc(it.name)}</b>${[fmtDur(it.dur),parsePrice(it.price)!==null?brl(parsePrice(it.price)):''].filter(Boolean).length?`<small>${[fmtDur(it.dur)?'⏱ '+fmtDur(it.dur):'',parsePrice(it.price)!==null?brl(parsePrice(it.price)):''].filter(Boolean).join(' · ')}</small>`:''}</span><span class="ag-ck" aria-hidden="true"></span></button>`).join('')}</div></div>`:''}
-        <div><div class="lbl-s">Escolha o dia</div>${days.length?`<div class="days">${days.map(dt=>{const iso=isoDay(dt);return `<button class="${st.d===iso?'on':''}" data-act="sched" data-k="${key}" data-f="d" data-v="${iso}"><small>${WEEK[dt.getDay()].toUpperCase()}</small><b>${dt.getDate()}</b><small>${dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></button>`}).join('')}</div>`:'<p class="sub">Nenhum dia disponível no momento.</p>'}</div>
+        <div><div class="lbl-s">Escolha o dia</div>${days.length?(()=>{ const avail=new Set(days.map(isoDay)); const f=days[0], l=days[days.length-1];
+          const span=(l.getFullYear()-f.getFullYear())*12+l.getMonth()-f.getMonth(); const mo=Math.min(span,Math.max(0,+st.mo||0));
+          const ref=new Date(f.getFullYear(), f.getMonth()+mo, 1, 12);
+          return `<div class="cal"><div class="cal-hd"><button data-act="sched" data-k="${key}" data-f="mo" data-v="${mo-1}" ${mo<=0?'disabled':''} aria-label="Mês anterior">‹</button><b>${MONTHS[ref.getMonth()]} ${ref.getFullYear()}</b><button data-act="sched" data-k="${key}" data-f="mo" data-v="${mo+1}" ${mo>=span?'disabled':''} aria-label="Próximo mês">›</button></div>
+            <div class="cal-g">${WEEK.map(w=>`<span class="cal-w">${w[0]}</span>`).join('')}${calGrid(ref.getFullYear(),ref.getMonth()).map(dt=>{ if(!dt) return '<span></span>'; const iso=isoDay(dt), ok=avail.has(iso);
+              return ok?`<button class="${st.d===iso?'on':''}" data-act="sched" data-k="${key}" data-f="d" data-v="${iso}" aria-label="${dt.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}">${dt.getDate()}</button>`:`<span class="cal-x">${dt.getDate()}</span>`; }).join('')}</div>
+            <div class="cal-lg"><span><i class="ok"></i>Disponível</span><span><i></i>Indisponível</span></div></div>`; })():'<p class="sub">Nenhum dia disponível no momento.</p>'}</div>
         ${dsel?`<div><div class="lbl-s">Horário</div>${times.length?`<div class="times">${times.map(tm=>`<button class="${st.t===tm?'on':''}" data-act="sched" data-k="${key}" data-f="t" data-v="${esc(tm)}">${esc(tm)}</button>`).join('')}</div>`:'<p class="sub">Sem horários livres neste dia.</p>'}</div>`:''}
         ${d.askName!==false?`<div class="ck-f"><label class="lbl-s">Seu nome</label><input type="text" class="pin" data-sch="${key}:n" value="${esc(st.n||'')}" placeholder="Como devemos te chamar?"></div>`:''}
         <div class="ck-f"><label class="lbl-s">Observação (opcional)</label><input type="text" class="pin" data-sch="${key}:o" value="${esc(st.o||'')}" placeholder="Ex.: primeira vez, preferência de profissional"></div>
@@ -1709,17 +1784,38 @@ function fieldHtml(m,k,lab,type){
       <span class="hint">Os pedidos vão para o WhatsApp da aba Publicar. Para pedidos na mesa, use os links de mesa da aba Publicar nas etiquetas NFC ou QR codes.</span>`:''}</div>`;
   }
   if(type==='agenda'){
-    const d=m.data, mid=m.id; if(!Array.isArray(d.days)) Object.assign(d, defAgenda({services:d.services,title:d.title}));
+    const d=m.data, mid=m.id; const wh=agWeek(d), ex=agExc(d);
     const opt=(v,l,cur)=>`<option value="${v}" ${String(cur)===String(v)?'selected':''}>${l}</option>`;
+    const WEEKL=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    const today=new Date(); today.setHours(12,0,0,0);
+    const mo=Math.max(0,Math.min(12,+(S.agMo&&S.agMo[mid])||0)); const ref=new Date(today.getFullYear(), today.getMonth()+mo, 1, 12);
+    const sel=(S.agSel&&S.agSel[mid])||''; const selD=sel?new Date(sel+'T12:00:00'):null; const se=sel?ex[sel]:null;
+    const selInf=selD?agDayInfo(d,selD):null; const allS=selD?agAllSlots(d,selD):[]; const offS=new Set((se&&se.off)||[]);
+    const upcoming=Object.keys(ex).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k) && k>=isoDay(today)).sort();
+    const stateOf=dt=>{ const iso=isoDay(dt), e=ex[iso]; if(dt<today) return 'past'; if(e&&e.mode==='fechado') return 'fech'; if(e&&e.mode==='especial') return 'esp'; return agDayInfo(d,dt).open ? (e&&e.off&&e.off.length?'blq':'aberto') : 'fech0'; };
     return `<div class="field"><label>${lab}</label>
-      <div class="sub-lbl">Dias de atendimento</div><div class="wk">${WEEK.map((w,i)=>`<button class="${d.days[i]?'on':''}" data-act="agday" data-id="${mid}" data-i="${i}">${w}</button>`).join('')}</div>
-      <div class="two"><div class="field"><label for="as-${mid}">Abre às</label><input type="time" id="as-${mid}" value="${esc(d.start||'09:00')}" data-f="mod:${mid}:start"></div><div class="field"><label for="ae-${mid}">Fecha às</label><input type="time" id="ae-${mid}" value="${esc(d.end||'18:00')}" data-f="mod:${mid}:end"></div></div>
+      <div class="sub-lbl">Semana padrão</div>
+      <div class="wkt">${WEEKL.map((w,i)=>`<div class="wkt-r ${d.days[i]?'':'off'}"><label class="wkt-d"><input type="checkbox" data-act="agday" data-id="${mid}" data-i="${i}" ${d.days[i]?'checked':''}> ${w}</label>
+        ${d.days[i]?`<input type="time" value="${esc(wh[i].start||'09:00')}" data-f="wh:${mid}:${i}:start" aria-label="${w}: abre às"><span>às</span><input type="time" value="${esc(wh[i].end||'18:00')}" data-f="wh:${mid}:${i}:end" aria-label="${w}: fecha às">`:'<em>Fechado</em>'}</div>`).join('')}
+        <button class="addline" data-act="agcopy" data-id="${mid}">Copiar o horário de segunda para os outros dias abertos</button></div>
       <div class="two"><div class="field"><label for="al-${mid}">Pausa das (opcional)</label><input type="time" id="al-${mid}" value="${esc(d.lunchStart||'')}" data-f="mod:${mid}:lunchStart"></div><div class="field"><label for="al2-${mid}">até</label><input type="time" id="al2-${mid}" value="${esc(d.lunchEnd||'')}" data-f="mod:${mid}:lunchEnd"></div></div>
       <div class="two"><div class="field"><label for="ai-${mid}">Duração de cada horário</label><select id="ai-${mid}" data-f="mod:${mid}:interval">${[15,20,30,40,45,60,90,120].map(v=>opt(v,v<60?v+' min':v===60?'1 hora':v===90?'1h30':'2 horas',d.interval)).join('')}</select></div>
-      <div class="field"><label for="aa-${mid}">Mostrar os próximos</label><select id="aa-${mid}" data-f="mod:${mid}:ahead">${[7,14,21,30,60].map(v=>opt(v,v+' dias',d.ahead)).join('')}</select></div></div>
-      <label class="toggle"><input type="checkbox" data-act="mdat" data-id="${mid}" data-f="askName" data-v="!" ${d.askName!==false?'checked':''}> Pedir o nome do cliente</label></div>`;
+      <div class="field"><label for="aa-${mid}">Abrir agenda para os próximos</label><select id="aa-${mid}" data-f="mod:${mid}:ahead">${[7,14,21,30,60,90,120].map(v=>opt(v,v+' dias',d.ahead)).join('')}</select></div></div>
+      <label class="toggle"><input type="checkbox" data-act="mdat" data-id="${mid}" data-f="askName" data-v="!" ${d.askName!==false?'checked':''}> Pedir o nome do cliente</label>
+      <div class="sub-lbl" style="margin-top:14px">Calendário: feriados, folgas e horários diferentes</div>
+      <div class="ecal"><div class="cal-hd"><button data-act="agmo" data-id="${mid}" data-v="${mo-1}" ${mo<=0?'disabled':''} aria-label="Mês anterior">‹</button><b>${MONTHS[ref.getMonth()]} ${ref.getFullYear()}</b><button data-act="agmo" data-id="${mid}" data-v="${mo+1}" ${mo>=12?'disabled':''} aria-label="Próximo mês">›</button></div>
+        <div class="cal-g">${WEEK.map(w=>`<span class="cal-w">${w[0]}</span>`).join('')}${calGrid(ref.getFullYear(),ref.getMonth()).map(dt=>{ if(!dt) return '<span></span>'; const stt=stateOf(dt), iso=isoDay(dt);
+          return stt==='past'?`<span class="cal-x">${dt.getDate()}</span>`:`<button class="st-${stt} ${sel===iso?'sel':''}" data-act="agsel" data-id="${mid}" data-v="${iso}">${dt.getDate()}</button>`; }).join('')}</div>
+        <div class="cal-lg"><span><i class="ok"></i>Aberto</span><span><i class="fe"></i>Fechado</span><span><i class="es"></i>Horário especial</span><span><i class="bq"></i>Com horários bloqueados</span></div>
+        ${selD?`<div class="ecal-day"><b>${selD.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}</b>
+          <div class="seg3">${[['','Padrão da semana'],['fechado','Fechado'],['especial','Horário especial']].map(([v,l])=>`<button class="${((se&&se.mode)||'')===v?'on':''}" data-act="agmode" data-id="${mid}" data-v="${v}">${l}</button>`).join('')}</div>
+          ${se&&se.mode==='especial'?`<div class="two"><div class="field"><label>Abre às</label><input type="time" value="${esc(se.start||'09:00')}" data-f="exc:${mid}:${sel}:start"></div><div class="field"><label>Fecha às</label><input type="time" value="${esc(se.end||'18:00')}" data-f="exc:${mid}:${sel}:end"></div></div>`:''}
+          ${selInf&&selInf.open&&allS.length?`<div class="sub-lbl">Toque para bloquear ou liberar horários deste dia</div><div class="slt">${allS.map(t=>`<button class="${offS.has(t)?'off':''}" data-act="agslot" data-id="${mid}" data-v="${t}" aria-pressed="${offS.has(t)}">${t}</button>`).join('')}</div>`:(selInf&&!selInf.open?'<p class="hint">Neste dia a agenda fica fechada para os clientes.</p>':'')}
+        </div>`:'<p class="hint">Toque em um dia para fechar, mudar o horário ou bloquear horários só naquela data.</p>'}
+        ${upcoming.length?`<div class="sub-lbl">Próximas datas especiais</div><div class="exl">${upcoming.map(k=>{ const e=ex[k], dt=new Date(k+'T12:00:00'); const lbl=e.mode==='fechado'?'Fechado':e.mode==='especial'?`${e.start||'09:00'} às ${e.end||'18:00'}`:''; const bq=(e.off||[]).length;
+          return `<div><button class="exl-d" data-act="agsel" data-id="${mid}" data-v="${k}">${dt.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})}</button><span>${[lbl, bq?bq+' horário(s) bloqueado(s)':''].filter(Boolean).join(' · ')}</span><button class="ib" data-act="agexrm" data-id="${mid}" data-v="${k}" aria-label="Voltar ao padrão">✕</button></div>`; }).join('')}</div>`:''}
+      </div></div>`;
   }
-  if(type==='tel') return `<div class="field"><label for="f-${m.id}-${k}">${lab}</label><input type="tel" id="f-${m.id}-${k}" value="${esc(m.data[k]||'')}" placeholder="11 99999-9999" data-f="mod:${m.id}:${k}"></div>`;
   if(type==='maptoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="map" data-v="!" ${m.data.map!==false?'checked':''}> Mostrar o mapa na página</label>`;
   if(type==='links'){
     const L=linkItems(m.data), mid=m.id;
@@ -2033,7 +2129,7 @@ document.addEventListener('click', async e=>{
   if(!a) return;
   if(stop && a.dataset.act==='closemodal' && !a.closest('button')) return;
   const act=a.dataset.act, id=a.dataset.id, v=a.dataset.v;
-  if(a.tagName==='INPUT' && a.type==='checkbox' && !['publish','ownc','itoff','mdat','ordt','wafloat'].includes(act)) return;
+  if(a.tagName==='INPUT' && a.type==='checkbox' && !['publish','ownc','itoff','mdat','ordt','wafloat','agday'].includes(act)) return;
   if(act.startsWith('adm') && admAct(act, id, a)) return;
   const p=curPage();
   switch(act){
@@ -2069,7 +2165,17 @@ document.addEventListener('click', async e=>{
     case 'wafloat': { p.theme.waFloat=!p.theme.waFloat; commit(true); break; }
     case 'mdat': { const m=p.mods.find(x=>x.id===id); const f=a.dataset.f; if(v==='!'){ const defOn=['nav','map','askName'].includes(f); const cur = m.data[f]===undefined ? defOn : m.data[f]!==false && !!m.data[f]; m.data[f]=!cur; } else m.data[f]=v; commit(true); break; }
     case 'ordt': { const m=p.mods.find(x=>x.id===id); const o=m.data.order=m.data.order||defOrder(); const f=a.dataset.f; if(f.startsWith('pay.')){ o.pay=o.pay||{}; o.pay[f.slice(4)]=!o.pay[f.slice(4)]; } else if(f==='askName') o.askName = o.askName===false; else o[f]=!o[f]; commit(true); break; }
-    case 'agday': { const m=p.mods.find(x=>x.id===id); m.data.days[+a.dataset.i]=!m.data.days[+a.dataset.i]; commit(true); break; }
+    case 'agday': { const m=p.mods.find(x=>x.id===id); agWeek(m.data); m.data.days[+a.dataset.i]=!m.data.days[+a.dataset.i]; commit(true); break; }
+    case 'agcopy': { const m=p.mods.find(x=>x.id===id); const wh=agWeek(m.data); for(let i=0;i<7;i++) if(i!==1) wh[i]={...wh[1]}; commit(true); toast('Horário copiado para todos os dias'); break; }
+    case 'agmo': { S.agMo={...(S.agMo||{}),[id]:+v}; refreshSide(); break; }
+    case 'agsel': { S.agSel={...(S.agSel||{}),[id]:S.agSel&&S.agSel[id]===v?'':v}; if(v){ const dt=new Date(v+'T12:00:00'), now=new Date(); S.agMo={...(S.agMo||{}),[id]:Math.max(0,(dt.getFullYear()-now.getFullYear())*12+dt.getMonth()-now.getMonth())}; } refreshSide(); break; }
+    case 'agmode': { const m=p.mods.find(x=>x.id===id); const ex=agExc(m.data), k=S.agSel&&S.agSel[id]; if(!k) break; const cur=ex[k]||{};
+      if(!v){ if(cur.off&&cur.off.length) ex[k]={off:cur.off}; else delete ex[k]; }
+      else if(v==='fechado') ex[k]={mode:'fechado'};
+      else { const w=agWeek(m.data)[new Date(k+'T12:00:00').getDay()]; ex[k]={mode:'especial', start:cur.start||w.start||'09:00', end:cur.end||w.end||'18:00', off:cur.off||[]}; }
+      commit(true); break; }
+    case 'agslot': { const m=p.mods.find(x=>x.id===id); const ex=agExc(m.data), k=S.agSel&&S.agSel[id]; if(!k) break; const e=ex[k]||(ex[k]={}); const off=new Set(e.off||[]); off.has(v)?off.delete(v):off.add(v); e.off=[...off].sort(); if(!e.mode&&!e.off.length) delete ex[k]; commit(true); break; }
+    case 'agexrm': { const m=p.mods.find(x=>x.id===id); delete agExc(m.data)[v]; commit(true); toast('Data voltou ao horário padrão'); break; }
     case 'mhide': { e.stopPropagation(); const m=p.mods.find(x=>x.id===id); m.hidden=!m.hidden; commit(true); toast(m.hidden?'Módulo oculto da página':'Módulo visível'); break; }
     case 'mdup': { e.stopPropagation(); const i=p.mods.findIndex(x=>x.id===id); const c=JSON.parse(JSON.stringify(p.mods[i])); c.id=uid(); p.mods.splice(i+1,0,c); S.openMod=c.id; commit(true); toast('Módulo duplicado'); break; }
     case 'rmbgimg': p.theme.bgImage=''; commit(true); break;
@@ -2111,6 +2217,7 @@ document.addEventListener('change', e=>{
   if(e.target.id==='an-unit'){ e.target.dispatchEvent(new Event('input',{bubbles:true})); return; }
   const s=e.target.closest('[data-act="sched-s"]'); if(s){ S.sched[s.dataset.k]={...(S.sched[s.dataset.k]||{}),s:s.value}; refreshAnyPage(s); return; }
   const up=e.target.closest('[data-up]'); if(up) handleUpload(up);
+  const ag=e.target.closest('[data-f^="exc:"],[data-f^="wh:"],[data-f*=":interval"],[data-f*=":lunch"]'); if(ag && typeof refreshSide==='function') setTimeout(refreshSide,0);
 });
 document.addEventListener('input', e=>{
   const ckel=e.target.closest('[data-ck]');
@@ -2130,6 +2237,8 @@ document.addEventListener('input', e=>{
   else if(scope==='lnk'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const l=linkItems(m.data).find(x=>x.id===parts[2]); l[parts[3]]=el.value; }
   else if(scope==='cat'||scope==='itm'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const sc=menuSecs(m.data).find(x=>x.id===parts[2]);
     if(scope==='cat') sc.title=el.value; else { const it=sc.items.find(x=>x.id===parts[3]); it[parts[4]]=el.value; if(parts[4]==='name'){ const t=el.closest('.mit-ed')?.querySelector('.iph-t'); if(t&&!it.photo) t.style.backgroundImage=`url('${illUrl(illFor(it.name,'prato'))}')`; } } }
+  else if(scope==='wh'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); agWeek(m.data)[+parts[2]][parts[3]]=el.value; }
+  else if(scope==='exc'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const e=agExc(m.data)[parts[2]]; if(e) e[parts[3]]=el.value; }
   else if(scope==='svc'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const it=agSvcs(m.data).find(x=>x.id===parts[2]); if(it) it[parts[3]]=el.value; }
   else if(scope==='mod'){ const m=p.mods.find(x=>x.id===a); if(b==='@accent') m.accent=el.value; else m.data[b]=el.value; }
   else if(scope==='page'){
