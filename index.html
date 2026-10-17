@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TNttKsndRfvTKO9gXTk3uLIZw2znSQKmDfkMx6Yb3mY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mZZzKXxRaGwCv+tObD2F3aGug5O8/O31rahNaC+2hGk='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -608,6 +608,18 @@ input[type=time]{width:100%;padding:10px 12px;border:1.5px solid var(--line);bor
 .times{display:flex;flex-wrap:wrap;gap:8px}
 .times button{padding:7px 12px;font-size:.92em}
 .ag{display:grid;gap:14px}
+.ag-sv{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.ag-sv button{display:flex;align-items:center;gap:12px;text-align:left;padding:10px;border-radius:calc(var(--p-r)*.6);border:1.5px solid color-mix(in srgb,currentColor 18%,transparent);background:transparent;color:inherit;font:inherit;cursor:pointer}
+.ag-sv button.on{border-color:var(--p-accent);background:color-mix(in srgb,var(--p-accent) 10%,transparent)}
+.ag-th{width:54px;height:54px;flex:none;border-radius:calc(var(--p-r)*.45);background-size:cover;background-position:center}
+.ag-tx{flex:1;min-width:0}.ag-tx b{display:block;line-height:1.25}.ag-tx small{display:block;opacity:.8;margin-top:2px;font-variant-numeric:tabular-nums}
+.ag-ck{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid color-mix(in srgb,currentColor 30%,transparent)}
+.ag-sv button.on .ag-ck{border-color:var(--p-accent);background:var(--p-accent);box-shadow:inset 0 0 0 3px var(--p-card,#fff)}
+.sv-end{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.sv-dur{margin-top:2px}
+.sv-bk{font:inherit;font-size:.85em;font-weight:700;padding:.4em .9em;border-radius:999px;border:1.5px solid var(--p-accent);color:var(--p-accent);background:transparent;cursor:pointer;text-decoration:none;white-space:nowrap}
+.sv-bk:hover{background:var(--p-accent);color:var(--p-on)}
+.pm.v5 .sv-end{flex-direction:row;align-items:center;justify-content:space-between;width:100%}
 .ag select{background:transparent;color:inherit;border:1.5px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:calc(var(--p-r)*.6);padding:.7em;font:inherit;width:100%}
 .ag select option{color:#111}
 .lbl-s{font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
@@ -941,8 +953,8 @@ const MODS = {
   capa:        {label:'Capa',         v5:false, fields:[['logo','Logo (opcional)','img'],['badge','Selo (opcional, ex.: Entrega grátis)'],['kicker','Etiqueta'],['title','Nome / título'],['subtitle','Frase de apresentação','area'],['cta','Texto do botão'],['link','Link do botão (deixe vazio para WhatsApp)'],['tone','Cor da imagem (sem foto)','color'],['image','Foto de capa','img']]},
   links:       {label:'Links',        v5:true,  fields:[['title','Título'],['links','Links','links']]},
   cardapio:    {label:'Cardápio',     v5:true,  fields:[['title','Título do cardápio'],['layout','Layout do cardápio','menulayout'],['sections','Categorias e itens','menu'],['order','Pedidos pelo WhatsApp','order']]},
-  servicos:    {label:'Serviços',     v5:true,  fields:[['title','Título'],['items','Serviços (um por linha): Nome | Descrição | Preço','area'],['photos','Fotos dos serviços','photos']]},
-  agendamento: {label:'Agendamento',  v5:false, fields:[['title','Título'],['services','Serviços oferecidos (um por linha)','area'],['agenda','Dias e horários de atendimento','agenda']]},
+  servicos:    {label:'Serviços',     v5:true,  fields:[['title','Título'],['svcs','Serviços (nome, foto, valor e duração)','svcs']]},
+  agendamento: {label:'Agendamento',  v5:false, fields:[['title','Título'],['svcs','Serviços (nome, foto, valor e duração)','svcs'],['agenda','Dias e horários de atendimento','agenda']]},
   horarios:    {label:'Horários',     v5:false, fields:[['title','Título'],['items','Um por linha: Dia | Horário','area']]},
   localizacao: {label:'Localização',  v5:false, fields:[['title','Título'],['address','Endereço completo (rua, número, bairro, cidade)','area'],['ref','Ponto de referência'],['mapLink','Link do Google Maps (opcional · cole o link de compartilhar)'],['wazeLink','Link do Waze (opcional · cole o link de compartilhar)'],['map','Mapa','maptoggle']]},
   galeria:     {label:'Galeria',      v5:true,  fields:[['title','Título'],['images','Fotos','gal']]},
@@ -962,8 +974,8 @@ function defData(t){
       mkSec('Pratos principais',[['Prato da casa','Descrição curta do prato','32'],['Prato do dia','Pergunte a opção de hoje','28']]),
       mkSec('Sobremesas',[['Sobremesa','Feita no dia','14']]),
       mkSec('Bebidas',[['Suco natural','Laranja, limão ou maracujá','9']])]},
-    servicos:{title:'Serviços',items:'Serviço principal | O que está incluso | 120\nServiço extra | Complemento | 60\nProjeto sob medida | Orçamento personalizado | Consultar'},
-    agendamento:defAgenda({title:'Agende seu horário',services:'Consulta\nRetorno'}),
+    servicos:{title:'Serviços',svcs:[mkSvc('Serviço principal','O que está incluso','120','60'),mkSvc('Serviço extra','Complemento','60','30'),mkSvc('Projeto sob medida','Orçamento personalizado','','')]},
+    agendamento:defAgenda({title:'Agende seu horário',svcs:[mkSvc('Consulta','Avaliação completa','150','60'),mkSvc('Retorno','Acompanhamento','80','30')]}),
     horarios:{title:'Horários',items:'Segunda a sexta | 09h às 18h\nSábado | 09h às 13h\nDomingo | Fechado'},
     localizacao:{title:'Onde estamos',address:'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',ref:'Em frente à estação do metrô',mapLink:'',wazeLink:'',map:true},
     galeria:{title:'Galeria',images:[],ills:[['mesa','Exemplo'],['banquete','Exemplo'],['interior1','Exemplo'],['buffet','Exemplo']]},
@@ -977,6 +989,17 @@ function defData(t){
 }
 const mkItem = (name='', desc='', price='', extra={}) => ({id:uid(), name, desc, price, photo:'', tag:'', off:false, opts:'', ...extra});
 const mkSec = (title, items=[]) => ({id:uid(), title, items:items.map(a=>mkItem(...a))});
+const mkSvc = (name='', desc='', price='', dur='', photo='') => ({id:uid(), name, desc, price, dur:String(dur||''), photo});
+const DURS = ['','15','20','30','40','45','60','75','90','120','150','180','240'];
+const fmtDur = v => { const n=+v; if(!n) return ''; const h=Math.floor(n/60), mm=n%60; return h ? `${h}h${mm?String(mm).padStart(2,'0'):''}` : `${mm} min`; };
+function agSvcs(d){ // serviços estruturados (compatível com a versão antiga em texto)
+  if(!Array.isArray(d.svcs)){
+    if(d.items!==undefined) d.svcs = rows(d.items).map((r,i)=>mkSvc(r[0],r[1]||'',r[2]||'','',(d.photos&&d.photos[i])||''));
+    else d.svcs = rows(d.services).map(r=>mkSvc(r[0],'','',''));
+    delete d.items; delete d.photos; delete d.services;
+  }
+  return d.svcs.filter(x=>x && typeof x==='object');
+}
 const TAGS = {'':'Nenhuma', mais:'Mais pedido', novo:'Novidade', veg:'Vegetariano', picante:'Picante', promo:'Promoção'};
 function menuSecs(d){ // compatível com cardápios antigos (texto por linha)
   if(!d.sections){ d.sections=[{id:uid(), title:'', items:rows(d.items).map((r,i)=>mkItem(r[0],r[1]||'',r[2]||'',{photo:(d.photos&&d.photos[i])||''}))}]; delete d.items; delete d.photos; }
@@ -1051,7 +1074,7 @@ const DEMOS = [
         mkSec('Cafés',[['Latte','Espresso duplo com leite vaporizado','14',{tag:'mais'}],['Café gelado','Cold brew com leite e calda','17']]),
         mkSec('Doces',[['Waffle com frutas vermelhas','Calda de chocolate e açúcar de confeiteiro','28'],['Torta de framboesa','Fatia individual','19',{tag:'novo'}]]),
         mkSec('Gelados',[['Açaí na tigela','Banana, granola e frutas','24',{opts:'300 ml | 18\n500 ml | 24\n700 ml | 30'}],['Picolé artesanal','Frutas da estação','9']])],layout:'grade',nav:true,order:{...defOrder(),delivery:false,fee:''}}),
-      mkMod('agendamento',defAgenda({title:'Reserve sua mesa',services:'Mesa para 2\nMesa para 4\nAniversário',days:[true,false,true,true,true,true,true],start:'09:00',end:'19:00',interval:'60',lunchStart:'',lunchEnd:''})),
+      mkMod('agendamento',defAgenda({title:'Reserve sua mesa',svcs:[mkSvc('Mesa para 2','Mesa reservada no salão','','90'),mkSvc('Mesa para 4','Ideal para famílias','','90'),mkSvc('Aniversário','Mesa decorada, até 10 pessoas','','120')],days:[true,false,true,true,true,true,true],start:'09:00',end:'19:00',interval:'60',lunchStart:'',lunchEnd:''})),
       mkMod('galeria',{title:'Nosso espaço',images:[],ills:[['interior1','Salão'],['interior2','Balcão'],['torta','Doces'],['smoothie','Bowls']]}),
       mkMod('links',{title:'Contato',links:[mkLink('Instagram','@cafeaurora','i:camera'),mkLink('WhatsApp','wa.me/5511988887777','i:conversa')]})
     ]}
@@ -1060,7 +1083,7 @@ const DEMOS = [
 const MINIS = [
   {...DEMOS[0], id:'mini1', mods:[mkMod('links',{title:'',links:[mkLink('Instagram','@saboroiental','i:camera'),mkLink('Falar no WhatsApp','wa.me/5511999999999','i:conversa'),mkLink('Conhecer a loja','saboroiental.com.br')]})], theme:{...DEMOS[0].theme,bgStyle:'solido',spacing:'compacto'}},
   {...DEMOS[0], id:'mini2', mods:[mkMod('cardapio',{title:'',sections:[mkSec('Sushis',[['Uramaki de salmão','8 peças com cream cheese','34',{tag:'mais'}],['Niguiri de camarão','2 peças','18']]),mkSec('Bebidas',[['Sucos e refrigerantes','Natural ou lata','9']])],order:{...defOrder()}})], theme:{...DEMOS[0].theme,bgStyle:'solido',spacing:'compacto'}},
-  {...DEMOS[1], id:'mini3', mods:[mkMod('agendamento',defAgenda({title:'',services:'Mesa para 2',start:'09:00',end:'12:00',interval:'60',lunchStart:'',lunchEnd:'',askName:false}))], theme:{...DEMOS[1].theme,bgStyle:'solido',spacing:'compacto'}},
+  {...DEMOS[1], id:'mini3', mods:[mkMod('agendamento',defAgenda({title:'',svcs:[mkSvc('Mesa para 2','','','90')],start:'09:00',end:'12:00',interval:'60',lunchStart:'',lunchEnd:'',askName:false}))], theme:{...DEMOS[1].theme,bgStyle:'solido',spacing:'compacto'}},
   {...DEMOS[0], id:'eddemo', mods:DEMOS[0].mods.slice(0,2)}
 ];
 
@@ -1288,24 +1311,28 @@ function renderMod(m,p,ctx){
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${search}${nav}${visSecs.map(sc=>`<div class="msec" id="sec-${sc.id}">${sc.title?`<h3 class="msec-t">${esc(sc.title)}</h3>`:''}<div class="mn mn-${lay}">${sc.items.map(item).join('')}</div></div>`).join('')}
         ${ord.on ? checkoutHtml(p,m,key) : ''}`;
       break; }
-    case 'servicos':
-      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="sv">${rows(d.items).map((it,i)=>`<div class="sv-i"><div class="sv-th" role="img" aria-label="${esc(it[0])}" style="${bgImg((d.photos&&d.photos[i])||illUrl(illFor(it[0]+' '+(it[1]||''),'servico')))}"></div><div class="sv-tx"><b>${esc(it[0])}</b>${it[1]?`<small>${esc(it[1])}</small>`:''}</div><b class="pr">${esc(fmtPrice(it[2]))}</b></div>`).join('')}</div>
-        ${p.whatsapp?`<a class="pb" style="margin-top:12px" href="${esc(wa(p.whatsapp,`Olá! Quero saber mais sobre os serviços da ${p.name}.`))}" target="_blank" rel="noopener" data-click>Pedir orçamento <span>↗</span></a>`:''}`;
-      break;
+    case 'servicos': {
+      const L=agSvcs(d).filter(x=>(x.name||'').trim());
+      const ag=p.mods.find(x=>x.type==='agendamento' && (!x.hidden||ctx==='edit'));
+      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="sv">${L.map(it=>{ const meta=[fmtDur(it.dur), parsePrice(it.price)!==null?brl(parsePrice(it.price)):''].filter(Boolean);
+        const book = ag ? `<button class="sv-bk" data-act="svbook" data-k="${p.id}:${ag.id}" data-v="${esc(it.name)}">Agendar</button>`
+          : (p.whatsapp?`<a class="sv-bk" href="${esc(wa(p.whatsapp,`Olá! Vim pela página ${p.name} e tenho interesse em: ${it.name}${meta.length?' ('+meta.join(' · ')+')':''}.`))}" target="_blank" rel="noopener" data-click>Pedir</a>`:'');
+        return `<div class="sv-i"><div class="sv-th" role="img" aria-label="${esc(it.name)}" style="${bgImg(it.photo||illUrl(illFor(it.name+' '+(it.desc||''),'servico')))}"></div><div class="sv-tx"><b>${esc(it.name)}</b>${it.desc?`<small>${esc(it.desc)}</small>`:''}${it.dur?`<small class="sv-dur">⏱ ${esc(fmtDur(it.dur))}</small>`:''}</div><div class="sv-end"><b class="pr">${esc(fmtPrice(it.price))}</b>${book}</div></div>`; }).join('')}</div>`;
+      break; }
     case 'agendamento': {
-      const st=S.sched[key]||{}, services=rows(d.services).map(r=>r[0]);
+      const st=S.sched[key]||{}, svl=agSvcs(d).filter(x=>(x.name||'').trim()), services=svl.map(x=>x.name);
       const days=agDays(d);
-      const sv = st.s ?? services[0] ?? '';
+      const sv = services.includes(st.s) ? st.s : (services.length===1 ? services[0] : ''); const svo = svl.find(x=>x.name===sv);
       const dsel = days.find(x=>isoDay(x)===st.d);
       const times = dsel ? agSlots(d,dsel) : [];
       const tOk = dsel && times.includes(st.t);
       const nameOk = !d.askName || (st.n||'').trim().length>1;
-      const ok = sv!==undefined && dsel && tOk && nameOk;
-      const msg = ok ? `*Pedido de agendamento — ${p.name}*\n${sv?`Serviço: ${sv}\n`:''}Dia: ${dsel.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'})}\nHorário: ${st.t}${st.n?`\nNome: ${st.n.trim()}`:''}${st.o?`\nObs.: ${st.o.trim()}`:''}` : '';
+      const ok = (!services.length || sv) && dsel && tOk && nameOk;
+      const msg = ok ? `*Pedido de agendamento — ${p.name}*\n${sv?`Serviço: ${sv}\n`:''}${svo?`Valor: ${parsePrice(svo.price)!==null?brl(parsePrice(svo.price)):'a consultar'}\n`:''}${svo&&svo.dur?`Duração: ${fmtDur(svo.dur)}\n`:''}Dia: ${dsel.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'})}\nHorário: ${st.t}${st.n?`\nNome: ${st.n.trim()}`:''}${st.o?`\nObs.: ${st.o.trim()}`:''}` : '';
       const link = ok ? wa(p.whatsapp,msg) : null;
-      const why = !dsel?'Escolha o dia':!tOk?'Escolha o horário':!nameOk?'Informe seu nome':!p.whatsapp?'O WhatsApp do negócio não foi configurado':'';
+      const why = services.length&&!sv?'Escolha o serviço':!dsel?'Escolha o dia':!tOk?'Escolha o horário':!nameOk?'Informe seu nome':!p.whatsapp?'O WhatsApp do negócio não foi configurado':'';
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}<div class="ag">
-        ${services.length>1?`<div><div class="lbl-s">Serviço</div><select data-act="sched-s" data-k="${key}" aria-label="Serviço">${services.map(s=>`<option ${s===sv?'selected':''}>${esc(s)}</option>`).join('')}</select></div>`:''}
+        ${svl.length?`<div><div class="lbl-s">Escolha o serviço</div><div class="ag-sv">${svl.map(it=>`<button class="${it.name===sv?'on':''}" data-act="sched" data-k="${key}" data-f="s" data-v="${esc(it.name)}" aria-pressed="${it.name===sv}"><span class="ag-th" style="${bgImg(it.photo||illUrl(illFor(it.name+' '+(it.desc||''),'servico')))}"></span><span class="ag-tx"><b>${esc(it.name)}</b>${[fmtDur(it.dur),parsePrice(it.price)!==null?brl(parsePrice(it.price)):''].filter(Boolean).length?`<small>${[fmtDur(it.dur)?'⏱ '+fmtDur(it.dur):'',parsePrice(it.price)!==null?brl(parsePrice(it.price)):''].filter(Boolean).join(' · ')}</small>`:''}</span><span class="ag-ck" aria-hidden="true"></span></button>`).join('')}</div></div>`:''}
         <div><div class="lbl-s">Escolha o dia</div>${days.length?`<div class="days">${days.map(dt=>{const iso=isoDay(dt);return `<button class="${st.d===iso?'on':''}" data-act="sched" data-k="${key}" data-f="d" data-v="${iso}"><small>${WEEK[dt.getDay()].toUpperCase()}</small><b>${dt.getDate()}</b><small>${dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></button>`}).join('')}</div>`:'<p class="sub">Nenhum dia disponível no momento.</p>'}</div>
         ${dsel?`<div><div class="lbl-s">Horário</div>${times.length?`<div class="times">${times.map(tm=>`<button class="${st.t===tm?'on':''}" data-act="sched" data-k="${key}" data-f="t" data-v="${esc(tm)}">${esc(tm)}</button>`).join('')}</div>`:'<p class="sub">Sem horários livres neste dia.</p>'}</div>`:''}
         ${d.askName!==false?`<div class="ck-f"><label class="lbl-s">Seu nome</label><input type="text" class="pin" data-sch="${key}:n" value="${esc(st.n||'')}" placeholder="Como devemos te chamar?"></div>`:''}
@@ -1731,6 +1758,20 @@ function fieldHtml(m,k,lab,type){
     <button class="addline strong" data-act="secadd" data-id="${mid}">+ Adicionar categoria</button>
     <span class="hint">Itens sem foto mostram uma ilustração de exemplo.</span></div>`;
   }
+  if(type==='svcs'){
+    const L=agSvcs(m.data), mid=m.id;
+    return `<div class="field"><label>${lab}</label><div class="med">${L.map((it,i)=>`<div class="mit-ed">
+        <div class="mit-top"><span class="iph-t" style="${bgImg(it.photo||illUrl(illFor(it.name,'servico')))}"></span>
+          <input type="text" value="${esc(it.name)}" placeholder="Nome do serviço" data-f="svc:${mid}:${it.id}:name" aria-label="Nome do serviço">
+          <button class="ib" data-act="svcmv" data-id="${mid}" data-i="${it.id}" data-d="-1" aria-label="Subir serviço" ${i===0?'disabled':''}>↑</button><button class="ib" data-act="svcmv" data-id="${mid}" data-i="${it.id}" data-d="1" aria-label="Descer serviço" ${i===L.length-1?'disabled':''}>↓</button><button class="ib" data-act="svcrm" data-id="${mid}" data-i="${it.id}" aria-label="Excluir serviço">✕</button></div>
+        <textarea class="mit-desc" placeholder="Breve descrição (opcional)" data-f="svc:${mid}:${it.id}:desc" aria-label="Descrição">${esc(it.desc||'')}</textarea>
+        <div class="mit-opts"><label class="mit-price">R$ <input type="text" inputmode="decimal" value="${esc(it.price||'')}" placeholder="0,00" data-f="svc:${mid}:${it.id}:price" aria-label="Valor"></label>
+          <select data-f="svc:${mid}:${it.id}:dur" aria-label="Duração">${DURS.map(v=>`<option value="${v}" ${String(it.dur||'')===v?'selected':''}>${v?'⏱ '+fmtDur(v):'Duração (opcional)'}</option>`).join('')}</select></div>
+        <div class="mit-opts"><label class="upl">${it.photo?'Trocar foto':'Enviar foto'}<input type="file" accept="image/*" data-up="svc:${mid}:${it.id}"></label>${it.photo?`<button class="btn btn-g btn-s" data-act="svcph" data-id="${mid}" data-i="${it.id}">Remover foto</button>`:''}</div>
+      </div>`).join('')}
+      <button class="addline strong" data-act="svcadd" data-id="${mid}">+ Adicionar serviço</button>
+      <span class="hint">Valor vazio aparece como "Consultar". Serviços sem foto mostram uma ilustração de exemplo.${m.type==='agendamento'?' O serviço escolhido, o valor e a duração vão na mensagem do WhatsApp.':''}</span></div></div>`;
+  }
   if(type==='photos') return `<div class="field"><label>${lab}</label><div class="iph">${rows(m.data.items).map((it,i)=>{const ph=m.data.photos&&m.data.photos[i];return `<div class="iph-r"><span class="iph-t" style="${bgImg(ph||illUrl(illFor(it[0],m.type==='cardapio'?'prato':'servico')))}"></span><span class="iph-n">${esc(it[0])}</span><label class="upl">${ph?'Trocar':'Enviar foto'}<input type="file" accept="image/*" data-up="item:${m.id}:${i}"></label>${ph?`<button class="ib" data-act="rmitem" data-id="${m.id}" data-i="${i}" aria-label="Remover foto">✕</button>`:''}</div>`}).join('')}</div><span class="hint">Sem foto, aparece uma ilustração de exemplo.</span></div>`;
   if(type==='gal') return `<div class="field"><label>${lab}</label><div class="gal-ed">${(v||[]).map((s,i)=>`<div style="background-image:url('${s}')"><button data-act="rmgal" data-id="${m.id}" data-i="${i}" aria-label="Remover foto">✕</button></div>`).join('')}</div><label class="upl">Adicionar fotos<input type="file" accept="image/*" multiple data-up="gal:${m.id}:${k}"></label><span class="hint">Sem fotos, a galeria mostra quadros de exemplo.</span></div>`;
   return `<div class="field"><label for="${fid}">${lab}</label><input type="text" id="${fid}" value="${esc(v)}" data-f="mod:${m.id}:${k}"></div>`;
@@ -2042,6 +2083,10 @@ document.addEventListener('click', async e=>{
     case 'secrm': { const m=p.mods.find(x=>x.id===id); const secs=menuSecs(m.data); const sc=secs.find(x=>x.id===a.dataset.s); if(sc.items.length){ S.modal=confirmModal(`Excluir a categoria "${esc(sc.title||'sem nome')}" e seus ${sc.items.length} itens?`,'secrmok',id+'|'+sc.id); $('#modal-root').innerHTML=S.modal; } else { m.data.sections=secs.filter(x=>x.id!==sc.id); commit(true); } break; }
     case 'secrmok': { const [mid,sid]=id.split('|'); const m=p.mods.find(x=>x.id===mid); m.data.sections=m.data.sections.filter(x=>x.id!==sid); S.modal=null; $('#modal-root').innerHTML=''; commit(true); toast('Categoria excluída'); break; }
     case 'secmv': { const m=p.mods.find(x=>x.id===id); const L=menuSecs(m.data); const i=L.findIndex(x=>x.id===a.dataset.s), j=i+ +a.dataset.d; if(j<0||j>=L.length) break; [L[i],L[j]]=[L[j],L[i]]; commit(true); break; }
+    case 'svcadd': { const m=p.mods.find(x=>x.id===id); agSvcs(m.data); const it=mkSvc(); m.data.svcs.push(it); commit(true); focusLater(`[data-f="svc:${id}:${it.id}:name"]`); break; }
+    case 'svcrm': { const m=p.mods.find(x=>x.id===id); agSvcs(m.data); m.data.svcs=m.data.svcs.filter(x=>x.id!==a.dataset.i); commit(true); toast('Serviço excluído'); break; }
+    case 'svcmv': { const m=p.mods.find(x=>x.id===id); const L=agSvcs(m.data)&&m.data.svcs; const i=L.findIndex(x=>x.id===a.dataset.i), j=i+ +a.dataset.d; if(j<0||j>=L.length) break; [L[i],L[j]]=[L[j],L[i]]; commit(true); break; }
+    case 'svcph': { const m=p.mods.find(x=>x.id===id); const it=agSvcs(m.data).find(x=>x.id===a.dataset.i); if(it) it.photo=''; commit(true); break; }
     case 'itadd': { const m=p.mods.find(x=>x.id===id); const sc=menuSecs(m.data).find(x=>x.id===a.dataset.s); const it=mkItem(); sc.items.push(it); commit(true); focusLater(`[data-f="itm:${id}:${sc.id}:${it.id}:name"]`); break; }
     case 'itrm': { const m=p.mods.find(x=>x.id===id); const sc=menuSecs(m.data).find(x=>x.id===a.dataset.s); sc.items=sc.items.filter(x=>x.id!==a.dataset.i); commit(true); toast('Item excluído'); break; }
     case 'itmv': { const m=p.mods.find(x=>x.id===id); const L=menuSecs(m.data).find(x=>x.id===a.dataset.s).items; const i=L.findIndex(x=>x.id===a.dataset.i), j=i+ +a.dataset.d; if(j<0||j>=L.length) break; [L[i],L[j]]=[L[j],L[i]]; commit(true); break; }
@@ -2054,6 +2099,7 @@ document.addEventListener('click', async e=>{
     case 'mjump': { const t=document.getElementById(a.dataset.t); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); break; }
     case 'copyaddr': { try{ await navigator.clipboard.writeText(v); toast('Endereço copiado'); }catch(err){ toast(v); } break; }
     case 'cart': { e.preventDefault(); const k=a.dataset.k, i=a.dataset.i; S.cart[k]=S.cart[k]||{}; S.cart[k][i]=Math.max(0,(S.cart[k][i]||0)+ +a.dataset.d); refreshAnyPage(a); break; }
+    case 'svbook': { const k=a.dataset.k; S.sched[k]={...(S.sched[k]||{}),s:v}; refreshAnyPage(a); const mid=k.split(':').pop(); setTimeout(()=>{ const el=document.querySelector(`.pg [data-mid="${mid}"]`); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },60); break; }
     case 'sched': { const k=a.dataset.k; S.sched[k]={...(S.sched[k]||{}),[a.dataset.f]:v}; refreshAnyPage(a); break; }
   }
 });
@@ -2084,6 +2130,7 @@ document.addEventListener('input', e=>{
   else if(scope==='lnk'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const l=linkItems(m.data).find(x=>x.id===parts[2]); l[parts[3]]=el.value; }
   else if(scope==='cat'||scope==='itm'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const sc=menuSecs(m.data).find(x=>x.id===parts[2]);
     if(scope==='cat') sc.title=el.value; else { const it=sc.items.find(x=>x.id===parts[3]); it[parts[4]]=el.value; if(parts[4]==='name'){ const t=el.closest('.mit-ed')?.querySelector('.iph-t'); if(t&&!it.photo) t.style.backgroundImage=`url('${illUrl(illFor(it.name,'prato'))}')`; } } }
+  else if(scope==='svc'){ const parts=el.dataset.f.split(':'); const m=p.mods.find(x=>x.id===parts[1]); const it=agSvcs(m.data).find(x=>x.id===parts[2]); if(it) it[parts[3]]=el.value; }
   else if(scope==='mod'){ const m=p.mods.find(x=>x.id===a); if(b==='@accent') m.accent=el.value; else m.data[b]=el.value; }
   else if(scope==='page'){
     if(a==='slug'){ const s=slugify(el.value); const taken=db.pages.some(x=>x.slug===s&&x.id!==p.id)||DEMOS.some(x=>x.slug===s); const hint=$('#slug-hint');
@@ -2201,6 +2248,7 @@ function handleUpload(inp){
     if(kind==='bgimg'){ p.theme.bgImage=urls[0]; }
     else if(kind==='lnk'){ const l=linkItems(m.data).find(x=>x.id===key); l.icon=urls[0]; S.icOpen=null; }
     else if(kind==='mitem'){ const it=menuSecs(m.data).find(x=>x.id===key).items.find(x=>x.id===key2); it.photo=urls[0]; }
+    else if(kind==='svc'){ const it=agSvcs(m.data).find(x=>x.id===key); if(it) it.photo=urls[0]; }
     else if(kind==='item'){ m.data.photos={...(m.data.photos||{}),[key]:urls[0]}; }
     else if(kind==='img') m.data[key]=urls[0]; else m.data[key]=[...(m.data[key]||[]),...urls];
     save(); refreshPreview(); refreshSide(); toast(urls.length>1?`${urls.length} fotos adicionadas`:'Foto adicionada');
