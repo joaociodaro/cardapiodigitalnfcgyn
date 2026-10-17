@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-VRBR9xRcadpuvVHV1z/UJpej/pzASlLeUhTmdaNo03s='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-2EIxIB6DCeKrc7VL42VvJEbq/08Ue6kQywwKsVQkLyI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -750,6 +750,17 @@ a.mapbox{display:block;text-decoration:none;color:inherit}
 .addr{margin:0}
 .loc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .loc-btns.one{grid-template-columns:1fr}
+.dl-txt{margin:.4em 0 0;opacity:.9}
+.dl-apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
+.dl-app{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:calc(var(--p-r)*.7);text-decoration:none;color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.dl-app .dl-n{font-size:1.25em;font-weight:900;letter-spacing:-.01em}
+.dl-app .dl-a{font-size:.88em;font-weight:700;opacity:.95;display:flex;justify-content:space-between}
+.dl-ifood{background:#D9142B}
+.dl-food99{background:#FFC21A;color:#1B1B1B}
+.dl-other{background:var(--p-accent);color:var(--p-on)}
+.dl-tip{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:12px 14px;border-radius:calc(var(--p-r)*.6);background:color-mix(in srgb,var(--p-accent) 8%,transparent);font-size:.92em;line-height:1.45}
+.dl-heart{flex:none;width:22px;height:22px;color:#E0245E;margin-top:1px}
+.dl-heart svg{width:100%;height:100%}
 .loc-btns .pb{white-space:nowrap}
 .pg.has-waf .pg-in{padding-bottom:84px}
 .wa-head{display:flex;align-items:center;gap:12px}
@@ -1007,6 +1018,7 @@ const MODS = {
   chamada:     {label:'Chamada',      v5:false, fields:[['title','Título'],['text','Texto','area'],['cta','Texto do botão'],['link','Link do botão (vazio = WhatsApp)']]},
   banner:      {label:'Banner',       v5:false, fields:[['image','Imagem do banner','img'],['title','Título'],['text','Texto','area'],['cta','Texto do botão (opcional)'],['link','Link do botão (vazio = WhatsApp)']]},
   whatsapp:    {label:'WhatsApp',     v5:false, fields:[['title','Título'],['text','Texto','area'],['who','Nome do responsável (opcional)'],['phone','Número do WhatsApp (deixe vazio para usar o WhatsApp do negócio)','tel'],['topics','Assuntos (um por linha, viram botões)','area'],['cta','Texto do botão principal']]},
+  delivery:    {label:'iFood e 99Food', v5:false, fields:[['title','Título'],['text','Texto','area'],['ifood','Link da sua loja no iFood'],['food99','Link da sua loja no 99Food'],['otherName','Outro app (opcional, ex.: Rappi)'],['other','Link do outro app (opcional)'],['favTip','Pedir para favoritar','favtoggle']]},
   texto:       {label:'Texto',        v5:false, fields:[['title','Título'],['text','Texto','area']]},
   video:       {label:'Vídeo',        v5:false, fields:[['title','Título'],['url','Link do vídeo no YouTube']]}
 };
@@ -1028,6 +1040,7 @@ function defData(t){
     chamada:{title:'Vamos conversar?',text:'Tire suas dúvidas e faça seu pedido pelo WhatsApp.',cta:'Chamar no WhatsApp',link:''},
     banner:{image:'',ill:'banquete',title:'Promoção da semana',text:'Combo para 2 pessoas com bebida inclusa.',cta:'Quero aproveitar',link:''},
     whatsapp:{title:'Fale com a gente',text:'Escolha o assunto e converse direto pelo WhatsApp.',who:'',phone:'',topics:'Fazer um pedido\nMarcar um horário\nAgendar uma consulta\nPedir um orçamento\nTirar uma dúvida',cta:'Conversar no WhatsApp'},
+    delivery:{title:'Peça também pelos apps',text:'Estamos no iFood e no 99Food. Abra nossa loja e toque no coração para favoritar: assim você encontra a gente rapidinho e fica sabendo das promoções.',ifood:'',food99:'',otherName:'',other:'',favTip:true},
     texto:{title:'Nossa história',text:'Conte aqui um pouco sobre o seu negócio, há quanto tempo existe e o que faz dele especial.'},
     video:{title:'Conheça a gente',url:''}
   })[t];
@@ -1085,7 +1098,7 @@ function defAgenda(x={}){ const o={days:[false,true,true,true,true,true,true], s
 const mkMod = (type, data={}, extra={}) => ({id:uid(), type, v:1, pad:'n', accent:'', data:{...defData(type), ...data}, ...extra});
 
 const TEMPLATES = {
-  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','horarios','localizacao','whatsapp','links']},
+  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','delivery','horarios','localizacao','whatsapp','links']},
   servicos:   {name:'Serviços', ill:'cozinha', desc:'Lista de serviços e perguntas',  look:'claro', mods:['capa','servicos','perguntas','whatsapp','links']},
   agenda:     {name:'Agendamentos', ill:'interior1',desc:'Salão, clínica, estúdio',       look:'ceu', mods:['capa','agendamento','servicos','horarios','localizacao','whatsapp']},
   portfolio:  {name:'Portfólio', ill:'banquete',   desc:'Fotos do seu trabalho',          look:'noite', mods:['capa','galeria','chamada','links']},
@@ -1432,6 +1445,14 @@ function renderMod(m,p,ctx){
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${map}${addr?`<p class="addr"><b>${esc(addr)}</b></p>`:''}${d.ref?`<p class="sub">${esc(d.ref)}</p>`:''}
         ${btns.length?`<div class="loc-btns ${btns.length===1?'one':''}">${btns.join('')}</div>`:(ctx==='edit'?'<p class="sub">Informe o endereço ou cole os links do Google Maps e do Waze.</p>':'')}
         ${addr?`<button class="lk-copy" data-act="copyaddr" data-v="${esc(addr)}">Copiar endereço</button>`:''}`;
+      break; }
+    case 'delivery': {
+      const apps=[['ifood','iFood',d.ifood],['food99','99Food',d.food99],['other',(d.otherName||'').trim()||'Outro app',d.other]].map(([k,n,u])=>{ let ok=''; try{ const x=new URL(safeUrl(u||'')); if(/^https?:$/.test(x.protocol) && /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(x.hostname)) ok=x.href; }catch(e){} return [k,n,ok]; }).filter(x=>x[2]);
+      const fav=d.favTip!==false;
+      h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${d.text?`<p class="dl-txt">${esc(d.text)}</p>`:''}
+        ${apps.length?`<div class="dl-apps">${apps.map(([k,n,u])=>`<a class="dl-app dl-${k}" href="${esc(u)}" target="_blank" rel="noopener" data-click><span class="dl-n">${esc(n)}</span><span class="dl-a">${fav?'Abrir e favoritar':'Pedir agora'} <span>↗</span></span></a>`).join('')}</div>
+        ${fav?`<div class="dl-tip"><span class="dl-heart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.5s-7.8-4.6-7.8-10.4A4.5 4.5 0 0 1 12 7.2a4.5 4.5 0 0 1 7.8 2.9c0 5.8-7.8 10.4-7.8 10.4z"/></svg></span><span><b>Como favoritar:</b> toque no app acima, entre na sua conta e toque no <b>coração</b> no topo da nossa loja.</span></div>`:''}`
+        :(ctx==='edit'?'<p class="sub">Cole os links da sua loja no iFood e no 99Food para os botões aparecerem.</p>':'')}`;
       break; }
     case 'whatsapp': {
       const num = String(d.phone||'').replace(/\D/g,'') ? d.phone : p.whatsapp;
@@ -1817,6 +1838,7 @@ function fieldHtml(m,k,lab,type){
           return `<div><button class="exl-d" data-act="agsel" data-id="${mid}" data-v="${k}">${dt.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})}</button><span>${[lbl, bq?bq+' horário(s) bloqueado(s)':''].filter(Boolean).join(' · ')}</span><button class="ib" data-act="agexrm" data-id="${mid}" data-v="${k}" aria-label="Voltar ao padrão">✕</button></div>`; }).join('')}</div>`:''}
       </div></div>`;
   }
+  if(type==='favtoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="favTip" data-v="!" ${m.data.favTip!==false?'checked':''}> Mostrar a dica de como favoritar a loja</label><span class="hint">Para pegar o link: abra sua loja no app ou no site do iFood ou do 99Food, toque em Compartilhar e copie o link.</span>`;
   if(type==='maptoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="map" data-v="!" ${m.data.map!==false?'checked':''}> Mostrar o mapa na página</label>`;
   if(type==='links'){
     const L=linkItems(m.data), mid=m.id;
@@ -2164,7 +2186,7 @@ document.addEventListener('click', async e=>{
     case 'copy': { const inp=$('#share-url'); try{ await navigator.clipboard.writeText(inp.value); toast('Link copiado'); }catch(err){ inp.select(); toast('Selecione e copie o link'); } break; }
     case 'rmimg': { const m=p.mods.find(x=>x.id===id); m.data[a.dataset.f]=''; commit(true); break; }
     case 'wafloat': { p.theme.waFloat=!p.theme.waFloat; commit(true); break; }
-    case 'mdat': { const m=p.mods.find(x=>x.id===id); const f=a.dataset.f; if(v==='!'){ const defOn=['nav','map','askName'].includes(f); const cur = m.data[f]===undefined ? defOn : m.data[f]!==false && !!m.data[f]; m.data[f]=!cur; } else m.data[f]=v; commit(true); break; }
+    case 'mdat': { const m=p.mods.find(x=>x.id===id); const f=a.dataset.f; if(v==='!'){ const defOn=['nav','map','askName','favTip'].includes(f); const cur = m.data[f]===undefined ? defOn : m.data[f]!==false && !!m.data[f]; m.data[f]=!cur; } else m.data[f]=v; commit(true); break; }
     case 'ordt': { const m=p.mods.find(x=>x.id===id); const o=m.data.order=m.data.order||defOrder(); const f=a.dataset.f; if(f.startsWith('pay.')){ o.pay=o.pay||{}; o.pay[f.slice(4)]=!o.pay[f.slice(4)]; } else if(f==='askName') o.askName = o.askName===false; else o[f]=!o[f]; commit(true); break; }
     case 'agday': { const m=p.mods.find(x=>x.id===id); agWeek(m.data); m.data.days[+a.dataset.i]=!m.data.days[+a.dataset.i]; commit(true); break; }
     case 'agcopy': { const m=p.mods.find(x=>x.id===id); const wh=agWeek(m.data); for(let i=0;i<7;i++) if(i!==1) wh[i]={...wh[1]}; commit(true); toast('Horário copiado para todos os dias'); break; }
