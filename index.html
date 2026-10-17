@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-2EIxIB6DCeKrc7VL42VvJEbq/08Ue6kQywwKsVQkLyI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EvzufCvhq7NeS3zztGQ+ctj+Sylp4ZOpPtyXBKav5pA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -751,6 +751,11 @@ a.mapbox{display:block;text-decoration:none;color:inherit}
 .loc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .loc-btns.one{grid-template-columns:1fr}
 .dl-txt{margin:.4em 0 0;opacity:.9}
+.rv{text-align:center}
+.rv-stars{display:flex;justify-content:center;gap:4px;color:#F5B301;margin-bottom:8px}
+.rv-stars svg{width:30px;height:30px}
+.rv-txt{margin:.4em auto 0;opacity:.9;max-width:34em}
+.rv-btn{justify-content:center;margin-top:14px}
 .dl-apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}
 .dl-app{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:calc(var(--p-r)*.7);text-decoration:none;color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.12)}
 .dl-app .dl-n{font-size:1.25em;font-weight:900;letter-spacing:-.01em}
@@ -1019,6 +1024,7 @@ const MODS = {
   banner:      {label:'Banner',       v5:false, fields:[['image','Imagem do banner','img'],['title','Título'],['text','Texto','area'],['cta','Texto do botão (opcional)'],['link','Link do botão (vazio = WhatsApp)']]},
   whatsapp:    {label:'WhatsApp',     v5:false, fields:[['title','Título'],['text','Texto','area'],['who','Nome do responsável (opcional)'],['phone','Número do WhatsApp (deixe vazio para usar o WhatsApp do negócio)','tel'],['topics','Assuntos (um por linha, viram botões)','area'],['cta','Texto do botão principal']]},
   delivery:    {label:'iFood e 99Food', v5:false, fields:[['title','Título'],['text','Texto','area'],['ifood','Link da sua loja no iFood'],['food99','Link da sua loja no 99Food'],['otherName','Outro app (opcional, ex.: Rappi)'],['other','Link do outro app (opcional)'],['favTip','Pedir para favoritar','favtoggle']]},
+  avaliacao:   {label:'Avalie no Google', v5:false, fields:[['title','Título'],['text','Texto','area'],['link','Link de avaliação do Google','reviewlink'],['cta','Texto do botão']]},
   texto:       {label:'Texto',        v5:false, fields:[['title','Título'],['text','Texto','area']]},
   video:       {label:'Vídeo',        v5:false, fields:[['title','Título'],['url','Link do vídeo no YouTube']]}
 };
@@ -1041,12 +1047,14 @@ function defData(t){
     banner:{image:'',ill:'banquete',title:'Promoção da semana',text:'Combo para 2 pessoas com bebida inclusa.',cta:'Quero aproveitar',link:''},
     whatsapp:{title:'Fale com a gente',text:'Escolha o assunto e converse direto pelo WhatsApp.',who:'',phone:'',topics:'Fazer um pedido\nMarcar um horário\nAgendar uma consulta\nPedir um orçamento\nTirar uma dúvida',cta:'Conversar no WhatsApp'},
     delivery:{title:'Peça também pelos apps',text:'Estamos no iFood e no 99Food. Abra nossa loja e toque no coração para favoritar: assim você encontra a gente rapidinho e fica sabendo das promoções.',ifood:'',food99:'',otherName:'',other:'',favTip:true},
+    avaliacao:{title:'Gostou? Avalie a gente no Google',text:'Sua opinião ajuda muito o nosso negócio e outras pessoas a nos conhecerem. Leva menos de 1 minuto!',link:'',cta:'Avaliar no Google'},
     texto:{title:'Nossa história',text:'Conte aqui um pouco sobre o seu negócio, há quanto tempo existe e o que faz dele especial.'},
     video:{title:'Conheça a gente',url:''}
   })[t];
 }
 const mkItem = (name='', desc='', price='', extra={}) => ({id:uid(), name, desc, price, photo:'', tag:'', off:false, opts:'', ...extra});
 const mkSec = (title, items=[]) => ({id:uid(), title, items:items.map(a=>mkItem(...a))});
+const extLink = u => { try{ const x=new URL(safeUrl(u||'')); if(/^https?:$/.test(x.protocol) && /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(x.hostname)) return x.href; }catch(e){} return ''; };
 const mkSvc = (name='', desc='', price='', dur='', photo='') => ({id:uid(), name, desc, price, dur:String(dur||''), photo});
 const DURS = ['','15','20','30','40','45','60','75','90','120','150','180','240'];
 const fmtDur = v => { const n=+v; if(!n) return ''; const h=Math.floor(n/60), mm=n%60; return h ? `${h}h${mm?String(mm).padStart(2,'0'):''}` : `${mm} min`; };
@@ -1098,9 +1106,9 @@ function defAgenda(x={}){ const o={days:[false,true,true,true,true,true,true], s
 const mkMod = (type, data={}, extra={}) => ({id:uid(), type, v:1, pad:'n', accent:'', data:{...defData(type), ...data}, ...extra});
 
 const TEMPLATES = {
-  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','delivery','horarios','localizacao','whatsapp','links']},
+  restaurante:{name:'Restaurante', ill:'mesa', desc:'Cardápio com pedido no WhatsApp', look:'claro', mods:['capa','cardapio','delivery','horarios','localizacao','avaliacao','whatsapp','links']},
   servicos:   {name:'Serviços', ill:'cozinha', desc:'Lista de serviços e perguntas',  look:'claro', mods:['capa','servicos','perguntas','whatsapp','links']},
-  agenda:     {name:'Agendamentos', ill:'interior1',desc:'Salão, clínica, estúdio',       look:'ceu', mods:['capa','agendamento','servicos','horarios','localizacao','whatsapp']},
+  agenda:     {name:'Agendamentos', ill:'interior1',desc:'Salão, clínica, estúdio',       look:'ceu', mods:['capa','agendamento','servicos','horarios','localizacao','avaliacao','whatsapp']},
   portfolio:  {name:'Portfólio', ill:'banquete',   desc:'Fotos do seu trabalho',          look:'noite', mods:['capa','galeria','chamada','links']},
   links:      {name:'Página de links', ill:'interior2', desc:'Todos os seus links',        look:'claro', mods:['capa','links']},
   branco:     {name:'Em branco',   desc:'Comece só com a capa',           look:'claro', mods:['capa']}
@@ -1446,8 +1454,14 @@ function renderMod(m,p,ctx){
         ${btns.length?`<div class="loc-btns ${btns.length===1?'one':''}">${btns.join('')}</div>`:(ctx==='edit'?'<p class="sub">Informe o endereço ou cole os links do Google Maps e do Waze.</p>':'')}
         ${addr?`<button class="lk-copy" data-act="copyaddr" data-v="${esc(addr)}">Copiar endereço</button>`:''}`;
       break; }
+    case 'avaliacao': {
+      const u=extLink(d.link);
+      const star='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></svg>';
+      h = `<div class="rv"><div class="rv-stars" aria-hidden="true">${star.repeat(5)}</div>${d.title?`<h2>${esc(d.title)}</h2>`:''}${d.text?`<p class="rv-txt">${esc(d.text)}</p>`:''}
+        ${u?`<a class="pb rv-btn" href="${esc(u)}" target="_blank" rel="noopener" data-click>${esc(d.cta||'Avaliar no Google')} <span>↗</span></a>`:(ctx==='edit'?'<p class="sub">Cole o link de avaliação do Google para o botão aparecer.</p>':'')}</div>`;
+      break; }
     case 'delivery': {
-      const apps=[['ifood','iFood',d.ifood],['food99','99Food',d.food99],['other',(d.otherName||'').trim()||'Outro app',d.other]].map(([k,n,u])=>{ let ok=''; try{ const x=new URL(safeUrl(u||'')); if(/^https?:$/.test(x.protocol) && /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(x.hostname)) ok=x.href; }catch(e){} return [k,n,ok]; }).filter(x=>x[2]);
+      const apps=[['ifood','iFood',d.ifood],['food99','99Food',d.food99],['other',(d.otherName||'').trim()||'Outro app',d.other]].map(([k,n,u])=>[k,n,extLink(u)]).filter(x=>x[2]);
       const fav=d.favTip!==false;
       h = `${d.title?`<h2>${esc(d.title)}</h2>`:''}${d.text?`<p class="dl-txt">${esc(d.text)}</p>`:''}
         ${apps.length?`<div class="dl-apps">${apps.map(([k,n,u])=>`<a class="dl-app dl-${k}" href="${esc(u)}" target="_blank" rel="noopener" data-click><span class="dl-n">${esc(n)}</span><span class="dl-a">${fav?'Abrir e favoritar':'Pedir agora'} <span>↗</span></span></a>`).join('')}</div>
@@ -1838,6 +1852,7 @@ function fieldHtml(m,k,lab,type){
           return `<div><button class="exl-d" data-act="agsel" data-id="${mid}" data-v="${k}">${dt.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})}</button><span>${[lbl, bq?bq+' horário(s) bloqueado(s)':''].filter(Boolean).join(' · ')}</span><button class="ib" data-act="agexrm" data-id="${mid}" data-v="${k}" aria-label="Voltar ao padrão">✕</button></div>`; }).join('')}</div>`:''}
       </div></div>`;
   }
+  if(type==='reviewlink') return `<div class="field"><label for="f-${m.id}-${k}">${lab}</label><input type="url" id="f-${m.id}-${k}" value="${esc(m.data[k]||'')}" placeholder="https://g.page/r/.../review" data-f="mod:${m.id}:${k}"><span class="hint">Como pegar: no Google, abra o <b>Perfil da Empresa</b> (pesquise o nome do negócio estando logado), toque em <b>Pedir avaliações</b> e copie o link. Quem toca no botão cai direto na tela de dar as estrelas.</span></div>`;
   if(type==='favtoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="favTip" data-v="!" ${m.data.favTip!==false?'checked':''}> Mostrar a dica de como favoritar a loja</label><span class="hint">Para pegar o link: abra sua loja no app ou no site do iFood ou do 99Food, toque em Compartilhar e copie o link.</span>`;
   if(type==='maptoggle') return `<label class="toggle"><input type="checkbox" data-act="mdat" data-id="${m.id}" data-f="map" data-v="!" ${m.data.map!==false?'checked':''}> Mostrar o mapa na página</label>`;
   if(type==='links'){
