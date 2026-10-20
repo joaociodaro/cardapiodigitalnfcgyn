@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EvzufCvhq7NeS3zztGQ+ctj+Sylp4ZOpPtyXBKav5pA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-aPHHbekiu0+sgTcoW4i1ShBZdta1pBNmUv/LknBcg08='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://dggndoawdutlkmikmxyh.supabase.co https://i.ytimg.com; connect-src 'self' https://dggndoawdutlkmikmxyh.supabase.co wss://dggndoawdutlkmikmxyh.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -281,6 +281,28 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);
 
 /* login */
 .auth{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;padding-block:48px 24px;align-items:start}
+.gate{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:28px 16px;background:radial-gradient(1200px 600px at 10% -10%,#DCE8FF 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#CFE0FF 0%,transparent 55%),var(--bg)}
+.gate-in{width:100%;max-width:430px;display:grid;gap:18px}
+.gate-logo{display:flex;justify-content:center}
+.gate-card{padding:28px 24px;box-shadow:0 18px 50px rgba(10,30,80,.10)}
+.gate-card h1{font-size:30px;letter-spacing:-.02em;margin-bottom:6px}
+.gate-card>p.muted{margin-bottom:18px}
+.gate-small{font-size:14px;text-align:center;margin-top:4px}
+.gate-sec{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);font-weight:600}
+.gate-ft{text-align:center;font-size:13.5px;color:var(--muted);line-height:1.7}
+.gate-ft a{color:var(--accent);font-weight:600}
+.pw-wrap{position:relative}
+.pw-wrap input{width:100%;padding-right:86px}
+.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:var(--soft);color:var(--accent);font:inherit;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;cursor:pointer}
+.pw-meter{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.pw-meter i{height:5px;border-radius:3px;background:var(--line)}
+.pw-meter[data-s="1"] i:nth-child(-n+1){background:#E5484D}
+.pw-meter[data-s="2"] i:nth-child(-n+2){background:#F2A93B}
+.pw-meter[data-s="3"] i:nth-child(-n+3){background:#3E9B4F}
+.pw-meter[data-s="4"] i{background:#1F8A3B}
+.hint.bad{color:#C0392B}.hint.good{color:#1F8A3B;font-weight:600}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.chk a{color:var(--accent);font-weight:600}
 @media (max-width:900px){.auth{grid-template-columns:1fr}}
 .tabs{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:22px}
 .tabs button{flex:1;padding:10px;border:0;border-radius:9px;background:transparent;cursor:pointer;font-weight:600;color:var(--muted)}
@@ -852,7 +874,13 @@ const onColor = hex => { try{ return lum(hex)>.45?'#141414':'#FFFFFF'; }catch(e)
 let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,3200); }
 
 /* ---------- dados na nuvem (Supabase) ---------- */
-const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
+const keepOn = () => { try{ return localStorage.getItem('nfc_keep')!=='0'; }catch(e){ return true; } };
+const authStore = {
+  getItem:k=>{ try{ return sessionStorage.getItem(k) ?? localStorage.getItem(k); }catch(e){ return null; } },
+  setItem:(k,v)=>{ try{ const keep=keepOn(); (keep?localStorage:sessionStorage).setItem(k,v); (keep?sessionStorage:localStorage).removeItem(k); }catch(e){} },
+  removeItem:k=>{ try{ localStorage.removeItem(k); sessionStorage.removeItem(k); }catch(e){} }
+};
+const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, storage: authStore, storageKey: 'nfc-auth' } });
 let db = { session:null, users:{}, pages:[], pending:[], ready:false };
 const me = () => db.session && db.users[db.session] ? db.users[db.session] : null;
 const active = u => !!(u && !u.blocked && u.sub && new Date(u.sub.until) > new Date());
@@ -1632,27 +1660,60 @@ function viewPriv(){
 }
 
 /* ---------- login ---------- */
+const COMMON_PW = new Set(['12345678','123456789','1234567890','12341234','11111111','00000000','87654321','password','password1','senha123','senha1234','senha12345','qwerty123','abc12345','abcd1234','admin123','mudar123','brasil123','iloveyou','teste123','cardapio1','cardapio123','cardapionfc','a1234567','123mudar','12345abc','q1w2e3r4','1q2w3e4r']);
+function pwIssues(pw, email=''){
+  const out=[], low=String(pw||'').toLowerCase();
+  if(low.length<8) out.push('ter pelo menos 8 caracteres');
+  if(!/[a-zA-Z]/.test(pw) || !/\d/.test(pw)) out.push('misturar letras e números');
+  if(COMMON_PW.has(low) || /^(.)\1+$/.test(low) || /^(0123|1234|2345|3456|4567|5678|6789|abcd)/.test(low)&&low.length<10) out.push('ser difícil de adivinhar');
+  const u=String(email||'').split('@')[0].toLowerCase(); if(u.length>=4 && low.includes(u)) out.push('ser diferente do seu e-mail');
+  return out;
+}
+function pwScore(pw){ pw=String(pw||''); let s=0; if(pw.length>=8)s++; if(pw.length>=12)s++; if(/[a-z]/.test(pw)&&/[A-Z]/.test(pw))s++; if(/\d/.test(pw)&&/[a-zA-Z]/.test(pw))s++; if(/[^a-zA-Z0-9]/.test(pw))s++; if(pwIssues(pw).length) s=Math.min(s,1); return Math.min(4,s); }
+const PUBLIC_ROUTES = ['login','privacidade','contato'];
 function viewLogin(){
-  if(me()){ location.hash='painel'; return ''; }
-  const t=S.authTab;
-  return hdr()+`<main class="wrap auth">
-    <div class="card"><h1 class="disp" style="font-size:32px;letter-spacing:-.02em;margin-bottom:6px">${t==='entrar'?'Entrar na sua conta':'Criar sua conta'}</h1>
-      <p class="muted" style="margin-bottom:20px">${t==='entrar'?'Acesse o painel para editar suas páginas.':'Leva menos de um minuto.'}</p>
-      <div class="tabs" role="tablist"><button class="${t==='entrar'?'on':''}" data-act="authtab" data-v="entrar">Entrar</button><button class="${t==='criar'?'on':''}" data-act="authtab" data-v="criar">Criar conta</button></div>
-      <form class="form" id="f-auth">
-        ${t==='criar'?`<div class="field"><label for="a-nome">Nome</label><input type="text" id="a-nome" autocomplete="name" required></div>`:''}
-        <div class="field"><label for="a-email">E-mail</label><input type="email" id="a-email" autocomplete="email" required></div>
-        <div class="field"><label for="a-senha">Senha</label><input type="password" id="a-senha" autocomplete="${t==='entrar'?'current-password':'new-password'}" minlength="${t==='entrar'?6:8}" maxlength="72" required>${t==='criar'?'<span class="hint">Mínimo de 8 caracteres. Use letras e números.</span>':''}</div>
-        ${S.authErr?`<div class="err">${esc(S.authErr)}</div>`:''}
-        <button class="btn btn-p btn-block" type="submit" ${S.busy?'disabled':''}>${S.busy?'Aguarde…':t==='entrar'?'Entrar':'Criar conta'}</button>
-        ${t==='entrar'?`<p class="muted" style="font-size:14px">Esqueceu a senha? <a href="#contato">Fale com o suporte</a>.</p>`:''}
-      </form></div>
-    <aside class="buy"><div class="eyebrow" style="color:var(--sun)">Assinatura</div><h2 class="disp" style="margin-top:10px">Ainda não é assinante?</h2>
-      <p>Sua primeira página é grátis. Para criar mais, escolha o período. Todos os planos liberam os mesmos recursos.</p>
-      ${Object.entries(PLANS).map(([k,p])=>`<button class="opt" data-act="buy" data-plan="${k}"><div><b>${p.name}</b><small>${k==='mensal'?'Cobrança mês a mês':`${brl(total(k))} à vista ou ${p.months}x de ${brl(p.month)}`}</small></div>
-        <div class="r"><b>${brl(p.month)}</b><small>por mês</small><span class="go">Adquirir →</span></div></button>`).join('')}
-      <p style="font-size:13px;margin-top:16px">Inclui: ${FEATURES.join(' · ')}.</p>
-    </aside></main>`+ftr();
+  if(me()){ const go=S.after||'painel'; S.after=null; location.hash=go; return ''; }
+  if(!S.formT) S.formT=Date.now();
+  const t=S.authTab, locked=S.authLock && S.authLock>Date.now(), secs=locked?Math.ceil((S.authLock-Date.now())/1000):0;
+  const eye = `<button type="button" class="pw-eye" data-act="pweye" aria-label="${S.pwShow?'Esconder senha':'Mostrar senha'}">${S.pwShow?'Ocultar':'Mostrar'}</button>`;
+  return `<div class="gate"><div class="gate-in">
+    <div class="gate-logo">${logo()}</div>
+    <div class="card gate-card">
+      <h1 class="disp">${t==='entrar'?'Entrar':'Criar sua conta'}</h1>
+      <p class="muted">${t==='entrar'?'Acesse o Cardápio NFC para criar e editar suas páginas.':'Sua primeira página é grátis. Leva menos de um minuto.'}</p>
+      <div class="tabs" role="tablist"><button class="${t==='entrar'?'on':''}" data-act="authtab" data-v="entrar" role="tab" aria-selected="${t==='entrar'}">Entrar</button><button class="${t==='criar'?'on':''}" data-act="authtab" data-v="criar" role="tab" aria-selected="${t==='criar'}">Criar conta</button></div>
+      <form class="form" id="f-auth" novalidate autocomplete="on">
+        ${t==='criar'?`<div class="field"><label for="a-nome">Seu nome ou do negócio</label><input type="text" id="a-nome" autocomplete="name" maxlength="120" required></div>`:''}
+        <div class="field"><label for="a-email">E-mail</label><input type="email" id="a-email" autocomplete="${t==='entrar'?'username':'email'}" inputmode="email" maxlength="200" required></div>
+        <div class="field"><label for="a-senha">Senha</label><div class="pw-wrap"><input type="${S.pwShow?'text':'password'}" id="a-senha" autocomplete="${t==='entrar'?'current-password':'new-password'}" maxlength="72" required>${eye}</div>
+          ${t==='criar'?`<div class="pw-meter" id="pw-meter" data-s="0"><i></i><i></i><i></i><i></i></div><span class="hint" id="pw-hint">Mínimo de 8 caracteres, com letras e números.</span>`:''}</div>
+        ${t==='criar'?`<div class="field"><label for="a-senha2">Confirme a senha</label><input type="${S.pwShow?'text':'password'}" id="a-senha2" autocomplete="new-password" maxlength="72" required></div>`:''}
+        <div class="hp" aria-hidden="true"><label for="a-site">Deixe em branco</label><input type="text" id="a-site" tabindex="-1" autocomplete="off"></div>
+        ${t==='entrar'?`<label class="chk"><input type="checkbox" id="a-keep" ${S.keep!==false?'checked':''}> Manter conectado neste aparelho</label>`
+          :`<label class="chk"><input type="checkbox" id="a-terms" required> Li e aceito a <a href="#privacidade" target="_blank">política de privacidade</a></label>`}
+        ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
+        <button class="btn btn-p btn-block" type="submit" ${S.busy||locked?'disabled':''}>${S.busy?'Aguarde…':locked?`Aguarde ${secs}s`:t==='entrar'?'Entrar':'Criar conta'}</button>
+        ${t==='entrar'?`<p class="muted gate-small">Esqueceu a senha? <a href="#contato">Fale com o suporte</a>.</p>`:''}
+      </form>
+      <div class="gate-sec"><span>🔒 Conexão criptografada</span><span>Senhas protegidas</span><span>Proteção contra robôs</span></div>
+    </div>
+    <p class="gate-ft">Primeira página grátis · Planos a partir de ${brl(PLANS.anual.month)}/mês<br><a href="#privacidade">Privacidade</a> · <a href="#contato">Contato</a></p>
+  </div></div>`;
+}
+function authValidate(){ // validações comuns antes de enviar
+  const t=S.authTab, email=($('#a-email')?.value||'').trim().toLowerCase(), pw=$('#a-senha')?.value||'';
+  if(($('#a-site')?.value||'')!=='') return {bot:true};
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return {err:'Confira o e-mail.'};
+  if(t==='entrar'){ if(!pw) return {err:'Digite sua senha.'}; return {email,pw}; }
+  const name=($('#a-nome')?.value||'').trim(); if(name.length<2) return {err:'Informe seu nome.'};
+  const iss=pwIssues(pw,email); if(iss.length) return {err:'A senha precisa '+iss.join(', ')+'.'};
+  if(pw!==($('#a-senha2')?.value||'')) return {err:'As senhas não são iguais.'};
+  if(!$('#a-terms')?.checked) return {err:'Para criar a conta, aceite a política de privacidade.'};
+  return {email,pw,name};
+}
+function authFail(msg, wrongPw){
+  if(wrongPw){ S.authFails=(S.authFails||0)+1; if(S.authFails>=5){ S.authLock=Date.now()+60000*Math.min(10,S.authFails-4); const tick=setInterval(()=>{ if(!S.authLock||S.authLock<=Date.now()){ clearInterval(tick); S.authLock=0; } if(location.hash==='#login'||!me()) render(); },1000); msg='Muitas tentativas erradas. Aguarde um pouco para tentar de novo.'; } }
+  S.authErr=msg;
 }
 
 /* ---------- checkout ---------- */
@@ -2129,7 +2190,8 @@ function render(){
   const h=(location.hash||'#inicio').slice(1)||'inicio';
   if(!db.ready && (['login','assinar','painel','dashboard','admin','revenda'].includes(h) || h.startsWith('editar-'))){ $('#app').innerHTML=`<main class="wrap" style="padding-block:120px;text-align:center"><p class="muted">Carregando…</p></main>`; return; }
   const app=$('#app'); let html='', after=null;
-  if(h==='inicio'||h==='como-funciona'||h==='planos'||h==='identidade') html=viewHome();
+  if(!me() && !h.startsWith('p-') && !PUBLIC_ROUTES.includes(h)){ if(h!=='inicio' && h!=='login') S.after=h; html=viewLogin(); }
+  else if(h==='inicio'||h==='como-funciona'||h==='planos'||h==='identidade') html=viewHome();
   else if(h==='sobre') html=viewSobre();
   else if(h==='contato') html=viewContato();
   else if(h==='privacidade') html=viewPriv();
@@ -2177,6 +2239,7 @@ document.addEventListener('click', async e=>{
     case 'idset': S.idT={...S.idT,[a.dataset.f]:v}; rerenderKeep(); break;
     case 'buy': S.co.plan=a.dataset.plan; S.co.mode='vista'; S.coDone=false; if(location.hash==='#assinar') render(); else location.hash='assinar'; break;
     case 'authtab': S.authTab=v; S.authErr=''; render(); break;
+    case 'pweye': { const vals={}; ['a-nome','a-email','a-senha','a-senha2'].forEach(i=>{ const el=$('#'+i); if(el) vals[i]=el.value; }); S.pwShow=!S.pwShow; render(); Object.entries(vals).forEach(([i,v])=>{ const el=$('#'+i); if(el) el.value=v; }); updMeter(); break; }
     case 'co': S.co[a.dataset.f]=v; if(a.dataset.f==='plan'&&v==='mensal') S.co.mode='vista'; S.coErr=''; rerenderKeep(); break;
     case 'pay': await doPay(); break;
     case 'logout': if(dirty.size) await flush(); await sb.auth.signOut(); db.session=null; db.users={}; db.pages=[]; db.pending=[]; S.adm.data=null; S.adm.state=null; S.authTab='entrar'; location.hash='inicio'; break;
@@ -2257,7 +2320,9 @@ document.addEventListener('change', e=>{
   const up=e.target.closest('[data-up]'); if(up) handleUpload(up);
   const ag=e.target.closest('[data-f^="exc:"],[data-f^="wh:"],[data-f*=":interval"],[data-f*=":lunch"]'); if(ag && typeof refreshSide==='function') setTimeout(refreshSide,0);
 });
+function updMeter(){ const m=$('#pw-meter'), pw=$('#a-senha'); if(!m||!pw) return; const sc=pw.value?Math.max(1,pwScore(pw.value)):0; m.dataset.s=sc; const h=$('#pw-hint'); if(h){ const iss=pwIssues(pw.value,$('#a-email')?.value||''); h.textContent = !pw.value ? 'Mínimo de 8 caracteres, com letras e números.' : iss.length ? 'A senha precisa '+iss.join(', ')+'.' : ['','Fraca','Razoável','Boa','Forte'][sc]+' ✓'; h.className='hint '+(iss.length?'bad':'good'); } }
 document.addEventListener('input', e=>{
+  if(e.target.id==='a-senha'||e.target.id==='a-email') updMeter();
   const ckel=e.target.closest('[data-ck]');
   if(ckel){ const cks=ckel.dataset.ck, ci=cks.lastIndexOf(':'), k=cks.slice(0,ci), f=cks.slice(ci+1); S.ck[k]={...(S.ck[k]||{}),[f]:ckel.value}; const pg=ckel.closest('.pg'); const pp=[...DEMOS,...MINIS,...db.pages,...Object.values(S.pub||{}).filter(Boolean)].find(x=>x.id===pg.dataset.pid); const mm=pp&&pp.mods.find(x=>x.id===k.split(':').pop()); const box=pg.querySelector(`[data-cksend="${k}"]`); if(pp&&mm&&box) box.outerHTML=ckSend(orderCalc(pp,mm,k),k); return; }
   const schel=e.target.closest('[data-sch]');
@@ -2290,17 +2355,20 @@ document.addEventListener('submit', async e=>{
   e.preventDefault();
   if(e.target.id && e.target.id.startsWith('f-adm')){ await admSubmit(e.target); return; }
   if(e.target.id==='f-auth'){
-    if(S.busy) return;
-    const email=$('#a-email').value.trim().toLowerCase(), pw=$('#a-senha').value, name=S.authTab==='criar'?$('#a-nome').value.trim():'';
+    if(S.busy || (S.authLock && S.authLock>Date.now())) return;
+    const v=authValidate(); if(v.bot) return; if(v.err){ S.authErr=v.err; render(); return; }
+    const {email,pw}=v, name=v.name||'', creating=S.authTab==='criar';
+    const keep = creating ? true : !!($('#a-keep')?.checked); S.keep=keep; try{ localStorage.setItem('nfc_keep', keep?'1':'0'); }catch(_){}
     S.busy=true; S.authErr=''; render();
+    let wrong=false;
     try{
-      if(S.authTab==='criar') await api('signup',{name,email,password:pw});
+      if(creating) await api('signup',{name,email,password:pw,t:Date.now()-(S.formT||0)});
       const { error } = await sb.auth.signInWithPassword({ email, password:pw });
-      if(error) throw new Error(/banned/i.test(error.message)?'Esta conta está bloqueada. Fale com o suporte.':/invalid/i.test(error.message)?'E-mail ou senha incorretos. Confira e tente de novo.':'Não foi possível entrar agora. Tente de novo.');
+      if(error){ wrong=/invalid/i.test(error.message); throw new Error(/banned/i.test(error.message)?'Esta conta está bloqueada. Fale com o suporte.':wrong?'E-mail ou senha incorretos. Confira e tente de novo.':/rate|many/i.test(error.message)?'Muitas tentativas. Aguarde alguns minutos.':'Não foi possível entrar agora. Tente de novo.'); }
       await loadSession();
       const u=me(); if(u && u.blocked){ await sb.auth.signOut(); db.session=null; throw new Error('Esta conta está bloqueada. Fale com o suporte.'); }
-      S.busy=false; location.hash = S.after || 'painel'; S.after=null; if(S.authTab==='criar') toast('Conta criada'); render();
-    }catch(err){ S.busy=false; S.authErr=err.message; render(); const ae=$('#a-email'); if(ae) ae.value=email; const an=$('#a-nome'); if(an) an.value=name; }
+      S.busy=false; S.authFails=0; const go=S.after||'painel'; S.after=null; location.hash=go; if(creating) toast('Conta criada'); render();
+    }catch(err){ S.busy=false; authFail(err.message, wrong); render(); const ae=$('#a-email'); if(ae) ae.value=email; const an=$('#a-nome'); if(an) an.value=name; }
   }
   if(e.target.id==='f-contato'){
     const row={ name:$('#c-nome').value.trim(), email:$('#c-email').value.trim(), subject:$('#c-assunto').value, message:$('#c-msg').value.trim() };
