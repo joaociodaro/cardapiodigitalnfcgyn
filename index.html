@@ -8,7 +8,7 @@
 <meta property="og:description" content="Seu negócio inteiro num link. Cardápio, serviços e agenda com pedidos pelo WhatsApp.">
 <meta property="og:image" content="img/capa_japones.jpg">
 <meta name="theme-color" content="#1652E0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-1hP3PvIYKsI8Dv++VS6Jg/BRccIFS4C4HOslj/mP4vw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://gwmichrhgoaaiwsudkhn.supabase.co https://i.ytimg.com; connect-src 'self' https://gwmichrhgoaaiwsudkhn.supabase.co wss://gwmichrhgoaaiwsudkhn.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-afPPIZo65X7dVnqeCWdgs2N+cSiXQfBIzaDDSP654p4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https://gwmichrhgoaaiwsudkhn.supabase.co https://i.ytimg.com; connect-src 'self' https://gwmichrhgoaaiwsudkhn.supabase.co wss://gwmichrhgoaaiwsudkhn.supabase.co; frame-src https://maps.google.com https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='20' height='20' rx='5' fill='%231652E0'/%3E%3Crect x='10' y='4' width='20' height='20' rx='5' fill='%239EC1FF' opacity='.9'/%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -1540,7 +1540,7 @@ function renderMod(m,p,ctx){
 const logo = () => `<a class="logo" href="#inicio" aria-label="Cardápio NFC, início"><span class="mk"></span>Cardápio<b>NFC</b></a>`;
 function hdr(){
   const u=me();
-  const links = `<a href="#como-funciona">Como funciona</a><a href="#planos">Planos</a><a href="#sobre">Sobre</a><a href="#contato">Contato</a>`;
+  const links = `<a href="#como-funciona">Como funciona</a><a href="#sobre">Sobre</a><a href="#contato">Contato</a>`;
   return `<header class="nav ${S.menu?'open':''}"><div class="wrap">${logo()}
     <nav class="navlinks">${links}
     ${u?`<a class="btn btn-p btn-s" href="#painel">Meu painel</a>`:`<a href="#login">Entrar</a><a class="btn btn-p btn-s" href="#login">Criar minha página</a>`}</nav>
@@ -1576,7 +1576,7 @@ function viewHome(){
       <h1 class="h1" style="margin-top:14px">Seu negócio inteiro <em>num link.</em></h1>
       <p class="lead">Monte seu cardápio, serviços e agenda em minutos. Seus clientes pedem e agendam pelo WhatsApp.</p>
       <div class="ctas"><a class="btn btn-p" href="#login">Criar minha página grátis</a><a class="btn btn-g" href="#p-sabor-oriental">Ver exemplo</a></div>
-      <p class="hero-note">1 página grátis · sem cartão de crédito</p></div>
+      <p class="hero-note">100% grátis · sem cartão de crédito</p></div>
     <div class="phones" aria-hidden="true">
       <div class="phone a"><div class="scaler">${renderPage(DEMOS[1],'thumb')}</div></div>
       <div class="phone b"><div class="scaler">${renderPage(DEMOS[0],'thumb')}</div></div>
@@ -1616,8 +1616,8 @@ function viewHome(){
   </section>
 
   <section class="sec wrap" style="padding-top:0" id="planos">
-    <div class="sec-head"><div class="eyebrow">Planos</div><h2 class="h2" style="margin-top:10px">Comece grátis. <em>Cresça quando quiser.</em></h2><p>Sua primeira página é grátis. Para criar mais, escolha um plano. Todos têm os mesmos recursos.</p></div>
-    ${planCards()}
+    <div class="sec-head"><div class="eyebrow">Preço</div><h2 class="h2" style="margin-top:10px">Tudo liberado. <em>De graça.</em></h2><p>Crie quantas páginas quiser, com todos os recursos: cardápio com pedidos no WhatsApp, agenda, fotos, mapas, QR Code e links por mesa. Sem plano, sem cartão de crédito.</p></div>
+    <div style="display:flex;justify-content:center"><a class="btn btn-p" href="#login">Criar minha conta grátis</a></div>
   </section>
 
   <section class="sec wrap" style="padding-top:0" id="revenda-info">
@@ -1638,7 +1638,7 @@ function viewSobre(){
   <div class="prose"><p>O Cardápio NFC nasceu para resolver um problema simples: o restaurante, o salão, a floricultura e o prestador de serviço precisam de um lugar na internet que mostre o que fazem e leve o cliente até a conversa. Sem site caro, sem programador, sem complicação.</p>
   <h2>O que acreditamos</h2><p>Uma boa página não precisa de dezenas de seções. Precisa do cardápio certo, do horário atualizado, do botão que abre o WhatsApp e de uma cara que combine com o negócio.</p>
   <h2>Como funciona</h2><p>Você escolhe um modelo, encaixa os módulos que fazem sentido, ajusta cores e fontes e publica. O link e o QR code ficam prontos na hora, e você acompanha visitas e cliques pelo painel.</p>
-  <h2>Um preço só, tudo liberado</h2><p>Todos os planos entregam os mesmos recursos. Você escolhe se prefere pagar mês a mês, por seis meses ou por um ano, e quanto mais longo o período, menor a mensalidade.</p>
+  <h2>Tudo liberado, de graça</h2><p>Todas as contas têm acesso completo a todos os recursos, sem plano e sem cartão de crédito.</p>
   <div><a class="btn btn-p" href="#login">Criar minha página</a></div></div></main>`+ftr();
 }
 function viewContato(){
@@ -1646,7 +1646,7 @@ function viewContato(){
   <form class="form card" id="f-contato" style="max-width:640px">
     <div class="field"><label for="c-nome">Nome</label><input type="text" id="c-nome" required></div>
     <div class="field"><label for="c-email">E-mail</label><input type="email" id="c-email" required></div>
-    <div class="field"><label for="c-assunto">Assunto</label><select id="c-assunto"><option>Quero ser revendedor</option><option>Dúvida sobre planos</option><option>Pagamento</option><option>Ajuda com minha página</option><option>Outro</option></select></div>
+    <div class="field"><label for="c-assunto">Assunto</label><select id="c-assunto"><option>Quero ser revendedor</option><option>Dúvida sobre o sistema</option><option>Pagamento</option><option>Ajuda com minha página</option><option>Outro</option></select></div>
     <div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" required></textarea></div>
     <button class="btn btn-p" type="submit">Enviar mensagem</button>
   </form></main>`+ftr();
@@ -1680,7 +1680,7 @@ function viewLogin(){
     <div class="gate-logo">${logo()}</div>
     <div class="card gate-card">
       <h1 class="disp">${t==='entrar'?'Entrar':'Criar sua conta'}</h1>
-      <p class="muted">${t==='entrar'?'Acesse o Cardápio NFC para criar e editar suas páginas.':'Sua primeira página é grátis. Leva menos de um minuto.'}</p>
+      <p class="muted">${t==='entrar'?'Acesse o Cardápio NFC para criar e editar suas páginas.':'Acesso completo e grátis. Leva menos de um minuto.'}</p>
       <div class="tabs" role="tablist"><button class="${t==='entrar'?'on':''}" data-act="authtab" data-v="entrar" role="tab" aria-selected="${t==='entrar'}">Entrar</button><button class="${t==='criar'?'on':''}" data-act="authtab" data-v="criar" role="tab" aria-selected="${t==='criar'}">Criar conta</button></div>
       <form class="form" id="f-auth" novalidate autocomplete="on">
         ${t==='criar'?`<div class="field"><label for="a-nome">Seu nome ou do negócio</label><input type="text" id="a-nome" autocomplete="name" maxlength="120" required></div>`:''}
@@ -1697,7 +1697,7 @@ function viewLogin(){
       </form>
       <div class="gate-sec"><span>🔒 Conexão criptografada</span><span>Senhas protegidas</span><span>Proteção contra robôs</span></div>
     </div>
-    <p class="gate-ft">Primeira página grátis · Planos a partir de ${brl(PLANS.anual.month)}/mês<br><a href="#privacidade">Privacidade</a> · <a href="#contato">Contato</a></p>
+    <p class="gate-ft">Acesso completo e gratuito<br><a href="#privacidade">Privacidade</a> · <a href="#contato">Contato</a></p>
   </div></div>`;
 }
 function authValidate(){ // validações comuns antes de enviar
@@ -1776,8 +1776,7 @@ function viewPainel(){
       <div class="stats"><span>${p.stats?.views||0} visitas</span><span>${p.stats?.clicks||0} cliques</span><span>/${esc(p.slug)}</span></div>
       <div class="acts"><a class="btn btn-p btn-s" href="#editar-${p.id}">Editar</a><a class="btn btn-g btn-s" href="#p-${p.slug}">Ver</a><button class="btn btn-g btn-s" data-act="dup" data-id="${p.id}">Duplicar</button><button class="btn btn-d btn-s" data-act="del" data-id="${p.id}">Excluir</button></div></div></article>`).join('')}
       <button class="newcard" data-act="new">+ Criar página</button></div>
-    ${free?`<div class="card acct"><div><div class="eyebrow">Minha assinatura</div><div class="kv" style="margin-top:8px"><div><span>Plano</span> <b>Grátis</b></div><div><span>Páginas</span> <b>${pages.length} de 1</b></div>${u.sub?`<div><span>Assinatura anterior</span> <b>vencida em ${new Date(u.sub.until).toLocaleDateString('pt-BR')}</b></div>`:''}</div></div><button class="btn btn-p btn-s" data-act="paywall">Assinar agora</button></div>`:`<div class="card acct"><div><div class="eyebrow">Minha assinatura</div><div class="kv" style="margin-top:8px"><div><span>Plano</span> <b>${planLabel(u.sub)}</b></div>${u.sub.plan==='admin'?'':`<div><span>Pagamento</span> <b>${u.sub.method==='pix'?'Pix':'Cartão'}${u.sub.plan!=='mensal'?(u.sub.mode==='vista'?' à vista':' parcelado'):''}</b></div>`}<div><span>Acesso até</span> <b>${new Date(u.sub.until).toLocaleDateString('pt-BR')}</b></div></div></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">${u.sub.plan==='admin'?`<span class="muted" style="font-weight:600">${daysLeft(u.sub.until)} dias restantes</span>`:`<span class="muted" style="font-weight:600">${daysLeft(u.sub.until)} dias restantes</span><button class="btn btn-g btn-s" data-act="buy" data-plan="${u.sub.plan}">Renovar</button>`}</div></div>`}
+    <div class="card acct"><div><div class="eyebrow">Meu acesso</div><div class="kv" style="margin-top:8px"><div><span>Acesso</span> <b>Completo e gratuito</b></div><div><span>Páginas</span> <b>${pages.length}</b></div></div></div></div>
   </main>`;
 }
 function tplModal(){
